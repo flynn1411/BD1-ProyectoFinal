@@ -115,8 +115,9 @@ class PyList:
 # that a DrawingApplication is like a Frame object except for the code
 # written here which redefines/extends the behavior of a Frame. 
 class DrawingApplication(tkinter.Frame):
-    def __init__(self, master=None):
+    def __init__(self, master=None,adminState=False):
         super().__init__(master)
+        self.adminState = adminState
         self.pack()
         self.buildWindow()    
         self.graphicsCommands = PyList()
@@ -240,6 +241,12 @@ class DrawingApplication(tkinter.Frame):
         
         fileMenu.add_command(label="Load Into...",command=addToFile)
         
+        if self.adminState:
+            def adminMgmt():
+                pass
+            fileMenu.add_command(label="Soy admin",command=adminMgmt)
+        
+
         # The write function writes an Json file to the given filename
         def write(filename):
             file = open(filename, "w")
@@ -468,6 +475,3 @@ def main():
 
     drawingApp.mainloop()
     print("Program Execution Completed.")
-        
-if __name__ == "__main__":
-    main()
