@@ -1,11 +1,14 @@
 DROP DATABASE IF EXISTS BaseA;
-CREATE DATABASE BaseA CHACTER SET utf8;
+CREATE DATABASE BaseA CHARACTER SET utf8;
 
 USE BaseA;
 
+DROP TABLE IF EXISTS Config;
+
 CREATE TABLE Config(
-    id INT AUTO_INCREMENT NOT NULL,
-    txt_penColor TEXT NOT NULL,
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    txt_penColor CHAR(7) NOT NULL,
+    txt_fillColor CHAR(7) NOT NULL,
     int_accountId INT NOT NULL,
     int_width INT NOT NULL,
     int_radius INT NOT NULL
@@ -14,8 +17,8 @@ CREATE TABLE Config(
 DROP TABLE IF EXISTS Account;
 
 CREATE TABLE Account(
-    id INT AUTO_INCREMENT NOT NULL,
-    txt_role TEXT NOT NULL,
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    txt_role TEXT NOT NULL DEFAULT "Operator",
     txt_name TEXT NOT NULL,
     txt_password TEXT NOT NULL
 );
@@ -23,12 +26,14 @@ CREATE TABLE Account(
 DROP TABLE IF EXISTS Drawing;
 
 CREATE TABLE Drawing(
-   int_accountID INT AUTO_INCREMENT NOT NULL,
+   int_accountID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
    tim_date TIMESTAMP NOT NULL,
    jso_file JSON
 );
-
+/*
 DROP TABLE IF EXISTS Record;
 CREATE TABLE Record(
     
 );
+
+*/
