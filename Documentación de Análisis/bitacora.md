@@ -6,3 +6,6 @@
 
 - (Ariel, Caleb y Gabriel) Se creó el diagrama Entidad Relación inicial y el modelo MVC para comenzar a trabajar y analizar como crear
 el programa.
+
+## Miercoles 2 de Diciembre 
+- (Fernando) Se creo la ventana para administrar el login y el empiezo de la clase de autentificacion de usuario ya sea normal o de administrador 
