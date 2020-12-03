@@ -9,3 +9,5 @@ el programa.
 
 ## Miercoles 2 de Diciembre 
 - (Fernando) Se creo la ventana para administrar el login y el empiezo de la clase de autentificacion de usuario ya sea normal o de administrador 
+
+- (Caleb y Josúe): Realizamos una reestructuración del diagrama ER y se comenzó con los archivos DDS.sql y DMS.sql para cada base de datos acorde. Asímimsmo, una mejor completación del diseño MVC.
