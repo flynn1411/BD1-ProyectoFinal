@@ -16,4 +16,8 @@ el programa.
 
 ## Jueves 3 de Diciembre  
 
-- (Caleb y Josué) Se actualizó el diagrama entidad relación (ER), agregando a los atributos su respectivo tipo de dato y además mejorando el diseño.  
+- (Caleb y Josué) Se actualizó el diagrama entidad relación (ER), agregando a los atributos su respectivo tipo de dato y además mejorando el diseño.
+
+## Viernes $ de Diciember 
+
+- (Gabriel y Fernando) Arreglo de bug de la venta de login, se conecto el mysqlConector con la ventana de login para poder hacer las verificaciones, se creo la clase encriptación al igual que la ventena para la smodificaciones del usuario, El programa ya distiguen entre los tipos de usuario. se agregaron variables para futuros arreglos como lo es el engine y el id de usuario con su nombre casi listo para poder almacenar info en la base de datos.
