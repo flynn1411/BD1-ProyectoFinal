@@ -22,6 +22,6 @@ el programa.
 
 - (Gabriel): Se creó un procedimiento almacenado de tal manera que se pueda usar para llevar a cabo la tarea de autenticación. Tambien se creó la clase de MySQLEngine para crear una conexión de la base de datos con los archivos python y se agregó un método para hacer llamados a procedimientos almacenados.
 
-## Viernes $ de Diciember 
+## Viernes 4 de Diciember 
 
 - (Gabriel y Fernando) Arreglo de bug de la venta de login, se conecto el mysqlConector con la ventana de login para poder hacer las verificaciones, se creo la clase encriptación al igual que la ventena para la smodificaciones del usuario, El programa ya distiguen entre los tipos de usuario. se agregaron variables para futuros arreglos como lo es el engine y el id de usuario con su nombre casi listo para poder almacenar info en la base de datos.
