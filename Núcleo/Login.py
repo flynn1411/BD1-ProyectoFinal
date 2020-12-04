@@ -2,6 +2,8 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 from DrawApp import DrawingApplication
+from ConnectionConfig import ConnectionConfig
+from MySQLEngine import MySQLEngine
 
 class Login:
     def __init__(self):
@@ -29,39 +31,49 @@ class Login:
         self.loginButton = tkinter.Button(self.login,text="LOGIN",command=self.getValues).place(x=150,y=150)
 
 
-        self.login.mainloop()   
+        self.login.mainloop()
+
 
     def getValues(self):
 
         #obtner los valores de los entry para el usuario y la contraseña 
-        user = self.userE.get()
-        password = self.passE.get()
-        test = True
+        userAcc = self.userE.get()
+        passwordAcc = self.passE.get()
+        #test = True
 
         #auth(user,password)  return [true or false , true or false] 
         #valid,admin = auth(user,password)
 
-        """ 
-        if valid:
+        config = ConnectionConfig("localhost", "3306", "root", "root", "BaseA")
+        engine = MySQLEngine(config)
+        userID = engine.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
+
+        if userID:
+            '''
             if admin:
                 self.adminState = False
-            paint()
-        else:
-            messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error") 
-        """
+            '''
 
+            user = {"userId": userID, "username": userAcc}
+            self.paint(user)
+        else:
+            tkinter.messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error") 
+        
+        """ 
         if test:
             self.adminState = False
             self.paint()
         else:
             tkinter.messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error")
+        """
 
 
   
-    def paint(self):
+    def paint(self, user):
         self.login.withdraw()
+        self.login.destroy()
         root = tkinter.Tk()  
-        drawingApp = DrawingApplication(root,self.adminState)  
+        drawingApp = DrawingApplication(root,self.adminState, user)  
         drawingApp.mainloop()
         print("Program Execution Completed.")
         
