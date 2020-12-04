@@ -14,9 +14,13 @@ el programa.
 
 - (Caleb y Josúe): Realizamos una reestructuración del diagrama ER y se comenzó con los archivos DDS.sql y DMS.sql para cada base de datos acorde. Asímimsmo, una mejor completación del diseño MVC.
 
+- (Gabriel): Se editó el código de la  aplicación de dibujo de tal manera que funcione alrededor de archivos json y no en doumentos XML como estaba implementado en un principio. 
+
 ## Jueves 3 de Diciembre  
 
 - (Caleb y Josué) Se actualizó el diagrama entidad relación (ER), agregando a los atributos su respectivo tipo de dato y además mejorando el diseño.
+
+- (Gabriel): Se creó un procedimiento almacenado de tal manera que se pueda usar para llevar a cabo la tarea de autenticación. Tambien se creó la clase de MySQLEngine para crear una conexión de la base de datos con los archivos python y se agregó un método para hacer llamados a procedimientos almacenados.
 
 ## Viernes $ de Diciember 
 
