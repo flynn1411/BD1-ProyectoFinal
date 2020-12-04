@@ -16,4 +16,4 @@ el programa.
 
 ## Jueves 3 de Diciembre  
 
-- (Caleb) Se actualizó el diagrama entidad relación (ER), agregando a los atributos su respectivo tipo de dato y además mejorando el diseño.  
+- (Caleb y Josué) Se actualizó el diagrama entidad relación (ER), agregando a los atributos su respectivo tipo de dato y además mejorando el diseño.  
