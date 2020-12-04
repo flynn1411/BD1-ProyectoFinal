@@ -115,9 +115,10 @@ class PyList:
 # that a DrawingApplication is like a Frame object except for the code
 # written here which redefines/extends the behavior of a Frame. 
 class DrawingApplication(tkinter.Frame):
-    def __init__(self, master=None,adminState=False, user = None):
+    def __init__(self, master=None,adminState=False, user = None,engine = None):
         super().__init__(master)
         self.user = user
+        self.engine = engine
         self.adminState = adminState
         self.pack()
         self.buildWindow()    
@@ -243,8 +244,16 @@ class DrawingApplication(tkinter.Frame):
         fileMenu.add_command(label="Load Into...",command=addToFile)
         
         if self.adminState:
+
             def adminMgmt():
-                pass
+                createUser = tkinter.Tk()
+                createUser.title("Admin")
+                createUser.geometry("400x600")
+                createUser.configure(background = 'white')
+                createUser.resizable(0,0)
+
+                createUser.mainloop()
+
             fileMenu.add_command(label="Soy admin",command=adminMgmt)
         
 

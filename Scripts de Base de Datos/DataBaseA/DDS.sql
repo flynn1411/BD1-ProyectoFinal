@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS Account;
 
 CREATE TABLE Account(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    txt_role TEXT NOT NULL DEFAULT "Operator",
+    txt_role CHAR(8) NOT NULL DEFAULT "Operator",
     txt_name TEXT NOT NULL,
     txt_password TEXT NOT NULL
 );

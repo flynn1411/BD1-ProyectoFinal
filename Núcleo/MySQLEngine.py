@@ -31,7 +31,7 @@ class MySQLEngine:
         return self.link.fetchall()
 
     def generalCallProcedure(self, procedureName, argsList):
-         result_args = self.link.callproc(procedureName, argsList)
-         return result_args[-1]
+        result_args = self.link.callproc(procedureName, argsList)
+        return result_args[-1]
 
 

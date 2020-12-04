@@ -2,14 +2,10 @@
 
 from ConnectionConfig import ConnectionConfig
 from MySQLEngine import MySQLEngine
+from Login import Login
 
-config = ConnectionConfig("localhost", "3306", "root", "root", "BaseA")
+config = ConnectionConfig("localhost", "3306", "root", "140403", "BaseA")
 engine = MySQLEngine(config)
 
-result = engine.generalCallProcedure('Auth',["Gabriel", "1234", '@userID'])
-if(result):
-    print(result)
-else:
-    print("Cuenta Inexistente o contraseña incorrecta")
-
+Login(engine)
 

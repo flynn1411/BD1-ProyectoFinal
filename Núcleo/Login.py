@@ -4,9 +4,11 @@ import tkinter.filedialog
 from DrawApp import DrawingApplication
 from ConnectionConfig import ConnectionConfig
 from MySQLEngine import MySQLEngine
+from Encrypt import Encryptor
 
 class Login:
-    def __init__(self):
+    def __init__(self,engine):
+        self.engine = engine
         self.adminState = False
         #Ventana para logear a los usuarios y sus atributos
         self.login = tkinter.Tk()
@@ -38,45 +40,27 @@ class Login:
 
         #obtner los valores de los entry para el usuario y la contraseña 
         userAcc = self.userE.get()
-        passwordAcc = self.passE.get()
-        #test = True
-
-        #auth(user,password)  return [true or false , true or false] 
-        #valid,admin = auth(user,password)
-
-        config = ConnectionConfig("localhost", "3306", "root", "root", "BaseA")
-        engine = MySQLEngine(config)
-        userID = engine.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
+        #passwordAcc =  encryptor.encrypt(self.passE.get(),"root")
+        passwordAcc =  self.passE.get()
+        
+        print(passwordAcc)
+        userID = self.engine.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
+        admin = self.engine.generalCallProcedure('GetRole',[userAcc, passwordAcc, '@userID'])
 
         if userID:
-            '''
-            if admin:
-                self.adminState = False
-            '''
+            if admin == "Admin":
+                self.adminState = True
 
             user = {"userId": userID, "username": userAcc}
             self.paint(user)
         else:
             tkinter.messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error") 
-        
-        """ 
-        if test:
-            self.adminState = False
-            self.paint()
-        else:
-            tkinter.messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error")
-        """
-
-
-  
+       
     def paint(self, user):
+
         self.login.withdraw()
         self.login.destroy()
         root = tkinter.Tk()  
-        drawingApp = DrawingApplication(root,self.adminState, user)  
+        drawingApp = DrawingApplication(root,self.adminState, user,self.engine)  
         drawingApp.mainloop()
         print("Program Execution Completed.")
-        
-            
-if __name__ == "__main__":
-    Login()
