@@ -19,10 +19,10 @@ INSERT INTO Element ( txt_elementType ) VALUES
     ("USUARIO")
 ;
 
-/*TRUNCATE TABLE Account;
+TRUNCATE TABLE Account;
 
-INSERT INTO Account ( txt_name , txt_password, txt_role) VALUES
-    ("SoyAdmin", "admin","Admin")
+INSERT INTO Account ( txt_name , txt_password, id_role) VALUES
+    ("SoyAdmin", "admin",1)
 ;
 
 INSERT INTO Account ( txt_name , txt_password) VALUES
@@ -30,4 +30,6 @@ INSERT INTO Account ( txt_name , txt_password) VALUES
     ("Fernando", "5678"),
     ("Josue", "hola"),
     ("Caleb", "0000")
-;*/
+;
+/*
+*/

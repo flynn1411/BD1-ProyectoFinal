@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import date, datetime, timedelta
 class MySQLEngine:
 
     def __init__(self, config):
@@ -34,4 +35,17 @@ class MySQLEngine:
         result_args = self.link.callproc(procedureName, argsList)
         return result_args[-1]
 
+    def insertDraw(self, name, userId, drawJson):
+        date = datetime.now()
+        addDraw = "INSERT INTO Drawing (txt_name, tim_date, accountId, jso_file) VALUES (%s, %s, %s, %s)"
+        dataDraw = (name, date, userId, drawJson)
 
+        self.link.execute(addDraw, dataDraw)
+        drawID = self.link.lastrowid
+        self.con.commit()
+
+        return drawID
+
+    def getDraws(self, userId):
+        result = self.select("SELECT Drawing.id, Drawing.txt_name FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
+        return result

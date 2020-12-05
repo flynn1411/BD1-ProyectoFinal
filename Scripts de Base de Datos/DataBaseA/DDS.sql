@@ -3,10 +3,16 @@ CREATE DATABASE BaseA CHARACTER SET utf8;
 
 USE BaseA;
 
+DROP TABLE IF EXISTS Role;
 CREATE TABLE Role(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_roleName CHAR(8) NOT NULL
 );
+
+INSERT INTO Role ( txt_roleName ) VALUES
+    ("ADMIN"),
+    ("OPERADOR")
+;
 
 DROP TABLE IF EXISTS Account;
 
@@ -14,7 +20,7 @@ CREATE TABLE Account(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_name TEXT NOT NULL,
     txt_password TEXT NOT NULL,
-    id_role INT NOT NULL,
+    id_role INT NOT NULL DEFAULT 2,
     CONSTRAINT fk_id_role FOREIGN KEY (id_role) REFERENCES Role(id)
 );
 
@@ -34,6 +40,7 @@ DROP TABLE IF EXISTS Drawing;
 
 CREATE TABLE Drawing(
    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+   txt_name TEXT,
    tim_date TIMESTAMP NOT NULL,
    accountId INT,
    jso_file JSON,

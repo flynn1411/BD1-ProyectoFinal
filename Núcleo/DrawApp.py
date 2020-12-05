@@ -202,13 +202,15 @@ class DrawingApplication(tkinter.Frame):
         
         #Guardar los dibujos
         def saveFileButton():
-           SaveFile()
+            drawJson = createJson()
+            SaveFile(drawJson, self.user["userId"], self.engine)
 
         fileMenu.add_command(label="Save",command=saveFileButton)
 
         #Abrir los dibujos
         def loadFileButton():
-            LoadFile()
+            result = self.engine.getDraws(self.user["userId"])
+            LoadFile(result)
             
         fileMenu.add_command(label="Load",command=loadFileButton)
         
@@ -227,21 +229,15 @@ class DrawingApplication(tkinter.Frame):
             fileMenu.add_command(label="Soy admin",command=adminMgmt)
 
         # The write function writes an Json file to the given filename
-        def write(filename):
-            file = open(filename, "w")
+        def createJson():
+            jsonDraw = {"GraphicsCommands":[]}
             
-            file.write('{ "GraphicsCommands":[\n')
-            begin = True
             for cmd in self.graphicsCommands:
-                if(begin):
-                    file.write('   '+str(cmd))   
-                    begin = False 
-                else:
-                    file.write(',\n   '+str(cmd))
-                
-            file.write('\n]}\n')
-                
-            file.close()        
+                jsonstring = str(cmd)
+                jsoncommand = json.loads(jsonstring)
+                jsonDraw["GraphicsCommands"].append(jsoncommand)
+              
+            return json.dumps(jsonDraw)
 
         #fileMenu.add_command(label="Exit",command=self.master.quit)
         

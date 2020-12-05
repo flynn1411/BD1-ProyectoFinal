@@ -43,12 +43,11 @@ class Login:
         #passwordAcc =  encryptor.encrypt(self.passE.get(),"root")
         passwordAcc =  self.passE.get()
         
-        print(passwordAcc)
         userID = self.engine.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
         admin = self.engine.generalCallProcedure('GetRole',[userAcc, passwordAcc, '@userID'])
 
         if userID:
-            if admin == "Admin":
+            if admin == "ADMIN":
                 self.adminState = True
 
             user = {"userId": userID, "username": userAcc}

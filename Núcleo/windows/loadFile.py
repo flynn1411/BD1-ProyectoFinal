@@ -3,7 +3,7 @@ import tkinter.messagebox
 
 class LoadFile:
 
-    def __init__(self):
+    def __init__(self, drawList):
 
         self.load = tkinter.Tk()
         self.load.title("Upload drawings")
@@ -26,10 +26,9 @@ class LoadFile:
         self.currentDrawLabel = tkinter.Label(self.load, text = "", font=('arial', 12))
         self.currentDrawLabel.place(x=190,y=370)
         
-        self.list.insert(0, "Dibujo1")
-        self.list.insert(1, "Dibujo2")
-        self.list.insert(2, "Dibujo3")
-        self.list.insert(3, "Dibujo4")
+        
+        for drawID, drawName in drawList:
+            self.list.insert(drawID, drawName)
 
         self.buttonLoad = tkinter.Button(self.load, text="Open", font=('arial', 12), cursor='hand2', command=self.loadDraw)
         self.buttonLoad.place(x=50,y=420, width=80)
