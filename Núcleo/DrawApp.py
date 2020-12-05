@@ -275,9 +275,30 @@ class DrawingApplication(tkinter.Frame):
             file.close()  
 
         def saveFile():
+            #ventana
+            save = tkinter.Tk()
+            save.title("Guardar Dibujo")
+            save.geometry("350x60")
+            nameLabel = tkinter.Label(save, text = "Nombre del Archivo: ", font=('arial', 12))
+            nameLabel.place(x=10,y=20)
+            filename = tkinter.Entry(save)
+            filename.place(x=170,y=20, height=20 )
+            buttonSave = tkinter.Button(save, text="OK!", font=('arial', 12))
+            buttonSave.place(x=300 ,y=20)
+
+
+
+
+
+            
+            
+            
+            '''
             filename = tkinter.filedialog.asksaveasfilename(title="Save Picture As...")
             filename = '%s.json' % filename
             write(filename)
+            '''
+
             
         fileMenu.add_command(label="Save As...",command=saveFile)
         
@@ -485,3 +506,4 @@ def main():
 
     drawingApp.mainloop()
     print("Program Execution Completed.")
+
