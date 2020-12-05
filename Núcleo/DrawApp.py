@@ -1,6 +1,8 @@
 # The imports include turtle graphics and tkinter modules. 
 # The colorchooser and filedialog modules let the user
 # pick a color and a filename.
+from windows.saveFile import SaveFile
+from windows.loadFile import LoadFile
 import turtle
 import tkinter
 import tkinter.colorchooser
@@ -197,52 +199,20 @@ class DrawingApplication(tkinter.Frame):
                     raise RuntimeError("Unknown Command: " + command) 
         
                 self.graphicsCommands.append(cmd)
+        
+        #Guardar los dibujos
+        def saveFileButton():
+           SaveFile()
 
-        def loadFile():
+        fileMenu.add_command(label="Save",command=saveFileButton)
 
-            filename = tkinter.filedialog.askopenfilename(title="Select a Graphics File")
+        #Abrir los dibujos
+        def loadFileButton():
+            LoadFile()
             
-            newWindow()
-            
-            # This re-initializes the sequence for the new picture. 
-            self.graphicsCommands = PyList()
-            
-            # calling parse will read the graphics commands from the file.
-            parse(filename)
-               
-            for cmd in self.graphicsCommands:
-                cmd.draw(theTurtle)
-                
-            # This line is necessary to update the window after the picture is drawn.
-            screen.update()
-            
-            
-        fileMenu.add_command(label="Load...",command=loadFile)
+        fileMenu.add_command(label="Load",command=loadFileButton)
         
-        def addToFile():
-            filename = tkinter.filedialog.askopenfilename(title="Select a Graphics File")
-            
-            theTurtle.penup()
-            theTurtle.goto(0,0)
-            theTurtle.pendown()
-            theTurtle.pencolor("#000000")
-            theTurtle.fillcolor("#000000")
-            cmd = PenUpCommand()
-            self.graphicsCommands.append(cmd)
-            cmd = GoToCommand(0,0,1,"#000000")
-            self.graphicsCommands.append(cmd)
-            cmd = PenDownCommand()
-            self.graphicsCommands.append(cmd)
-            screen.update()
-            parse(filename)
-               
-            for cmd in self.graphicsCommands:
-                cmd.draw(theTurtle)
-                
-            screen.update()            
-        
-        fileMenu.add_command(label="Load Into...",command=addToFile)
-        
+        #Ventana de administrador 
         if self.adminState:
 
             def adminMgmt():
@@ -255,7 +225,6 @@ class DrawingApplication(tkinter.Frame):
                 createUser.mainloop()
 
             fileMenu.add_command(label="Soy admin",command=adminMgmt)
-        
 
         # The write function writes an Json file to the given filename
         def write(filename):
@@ -272,38 +241,9 @@ class DrawingApplication(tkinter.Frame):
                 
             file.write('\n]}\n')
                 
-            file.close()  
+            file.close()        
 
-        def saveFile():
-            #ventana
-            save = tkinter.Tk()
-            save.title("Guardar Dibujo")
-            save.geometry("350x60")
-            nameLabel = tkinter.Label(save, text = "Nombre del Archivo: ", font=('arial', 12))
-            nameLabel.place(x=10,y=20)
-            filename = tkinter.Entry(save)
-            filename.place(x=170,y=20, height=20 )
-            buttonSave = tkinter.Button(save, text="OK!", font=('arial', 12))
-            buttonSave.place(x=300 ,y=20)
-
-
-
-
-
-            
-            
-            
-            '''
-            filename = tkinter.filedialog.asksaveasfilename(title="Save Picture As...")
-            filename = '%s.json' % filename
-            write(filename)
-            '''
-
-            
-        fileMenu.add_command(label="Save As...",command=saveFile)
-        
-
-        fileMenu.add_command(label="Exit",command=self.master.quit)
+        #fileMenu.add_command(label="Exit",command=self.master.quit)
         
         bar.add_cascade(label="File",menu=fileMenu)
         

@@ -18,21 +18,21 @@ class Login:
         self.login.resizable(0,0)
 
         #Espacio para ingresar un usuario
-        self.userL = tkinter.Label(self.login,text='User',font = ('arial',15),bd=5,bg="white")
+        self.userL = tkinter.Label(self.login,text='User: ',font = ('arial',15),bd=5,bg="white")
         self.userL.place(x=90,y=50)
         self.userE = tkinter.Entry(self.login)
         self.userE.place(x=150,y=50,height=30)
         
         #Espacio para ingresar una contraseña
-        self.passL = tkinter.Label(self.login,text='Password',font = ('arial',15),bd=5,bg="white")
-        self.passL.place(x=50,y=100)
+        self.passL = tkinter.Label(self.login,text='Password: ',font = ('arial',15),bd=5,bg="white")
+        self.passL.place(x=46,y=100)
         self.passE = tkinter.Entry(self.login,show="*")
         self.passE.place(x=150,y=100,height=30)
 
         #Boton para ejecutar la verificacion edl usuario 
-        self.loginButton = tkinter.Button(self.login,text="LOGIN",command=self.getValues).place(x=150,y=150)
+        self.loginButton = tkinter.Button(self.login,text="LOGIN",cursor='hand2',command=self.getValues).place(x=150,y=150)
 
-
+        #Loop para que la ventana se mantenga abierta
         self.login.mainloop()
 
 
@@ -63,4 +63,3 @@ class Login:
         root = tkinter.Tk()  
         drawingApp = DrawingApplication(root,self.adminState, user,self.engine)  
         drawingApp.mainloop()
-        print("Program Execution Completed.")
