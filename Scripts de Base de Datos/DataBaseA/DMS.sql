@@ -1,6 +1,25 @@
 USE BaseA;
 
-TRUNCATE TABLE Account;
+INSERT INTO Role ( txt_roleName ) VALUES
+    ("ADMIN"),
+    ("OPERADOR")
+;
+
+INSERT INTO Action ( txt_actionName ) VALUES
+    ("VIZUALIZACION"),
+    ("MODIFICACION"),
+    ("ELIMINACION"),
+    ("AUTENTICACION"),
+    ("CREACION")
+;
+
+INSERT INTO Element ( txt_elementType ) VALUES
+    ("DIBUJO"),
+    ("CONFIGURACION"),
+    ("USUARIO")
+;
+
+/*TRUNCATE TABLE Account;
 
 INSERT INTO Account ( txt_name , txt_password, txt_role) VALUES
     ("SoyAdmin", "admin","Admin")
@@ -11,4 +30,4 @@ INSERT INTO Account ( txt_name , txt_password) VALUES
     ("Fernando", "5678"),
     ("Josue", "hola"),
     ("Caleb", "0000")
-;
+;*/
