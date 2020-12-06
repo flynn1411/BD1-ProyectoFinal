@@ -37,7 +37,7 @@ class MySQLEngine:
 
     def insertDraw(self, name, userId, drawJson):
         date = datetime.now()
-        addDraw = "INSERT INTO Drawing (txt_name, tim_date, accountId, jso_file) VALUES (%s, %s, %s, %s)"
+        addDraw = "INSERT INTO Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (%s, %s, %s, %s)"
         dataDraw = (name, date, userId, drawJson)
 
         self.link.execute(addDraw, dataDraw)
@@ -47,5 +47,5 @@ class MySQLEngine:
         return drawID
 
     def getDraws(self, userId):
-        result = self.select("SELECT Drawing.id, Drawing.txt_name FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
+        result = self.select("SELECT Drawing.id, Drawing.txt_fileName FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
         return result

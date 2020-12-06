@@ -1,11 +1,11 @@
 USE BaseA;
 
-INSERT INTO Role ( txt_roleName ) VALUES
+/*INSERT INTO Role ( txt_roleName ) VALUES
     ("ADMIN"),
     ("OPERADOR")
-;
+;*/
 
-INSERT INTO Action ( txt_actionName ) VALUES
+/*INSERT INTO Action ( txt_actionName ) VALUES
     ("VIZUALIZACION"),
     ("MODIFICACION"),
     ("ELIMINACION"),
@@ -17,9 +17,9 @@ INSERT INTO Element ( txt_elementType ) VALUES
     ("DIBUJO"),
     ("CONFIGURACION"),
     ("USUARIO")
-;
+;*/
 
-TRUNCATE TABLE Account;
+/*TRUNCATE TABLE Account;*/
 
 INSERT INTO Account ( txt_name , txt_password, id_role) VALUES
     ("SoyAdmin", "admin",1)

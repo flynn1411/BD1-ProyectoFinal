@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS Drawing;
 
 CREATE TABLE Drawing(
    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-   txt_name TEXT,
+   txt_fileName TEXT,
    tim_date TIMESTAMP NOT NULL,
    accountId INT,
    jso_file JSON,
@@ -52,22 +52,37 @@ CREATE TABLE Action(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_actionName CHAR(15) NOT NULL
 );
+
+INSERT INTO Action ( txt_actionName ) VALUES
+    ("VIZUALIZACION"),
+    ("MODIFICACION"),
+    ("ELIMINACION"),
+    ("AUTENTICACION"),
+    ("CREACION")
+;
+
 CREATE TABLE Element(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_elementType CHAR(15) NOT NULL
 
 );
 
-DROP TABLE IF EXISTS Record;
+INSERT INTO Element ( txt_elementType ) VALUES
+    ("DIBUJO"),
+    ("CONFIGURACION"),
+    ("USUARIO")
+;
 
-CREATE TABLE Record(
+DROP TABLE IF EXISTS LogBook;
+
+CREATE TABLE LogBook(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     tim_recordDate TIMESTAMP NOT NULL,
     action CHAR(15) NOT NULL,
     txt_elementType CHAR(14) NOT NULL,
     accountId INT NOT NULL,
-    actionId INT NOT NULL,
-    id_elementId INT NOT NULL,
+    actionId INT DEFAULT 3 NOT NULL,
+    id_elementId INT DEFAULT 1 NOT NULL,
     CONSTRAINT fk_account_id FOREIGN KEY (accountId) REFERENCES Account(id),
     CONSTRAINT fk_actionId FOREIGN KEY (actionId) REFERENCES Action(id),
     CONSTRAINT fk_id_elementId FOREIGN KEY (id_elementId) REFERENCES Element(id)
