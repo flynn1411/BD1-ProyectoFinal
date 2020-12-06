@@ -31,19 +31,30 @@ class MySQLEngine:
 
         return self.link.fetchall()
 
+    def insert(self, tableName, argsList = [], dataElement = ()):
+        tupleStr = []
+        for _ in range(len(dataElement)):
+            tupleStr.append("%s")
+            
+        addElement = "INSERT INTO %s (%s) VALUES (%s)" % (tableName, ",".join(argsList), ",".join(tupleStr) )
+
+        self.link.execute(addElement, dataElement)
+        elementId = self.link.lastrowid
+        self.con.commit()
+        return elementId
+
     def generalCallProcedure(self, procedureName, argsList):
         result_args = self.link.callproc(procedureName, argsList)
         return result_args[-1]
 
     def insertDraw(self, name, userId, drawJson):
         date = datetime.now()
-        addDraw = "INSERT INTO Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (%s, %s, %s, %s)"
-        dataDraw = (name, date, userId, drawJson)
-
-        self.link.execute(addDraw, dataDraw)
-        drawID = self.link.lastrowid
-        self.con.commit()
-
+        drawID =  self.insert(
+            'Drawing',  
+            ["txt_fileName", "tim_date", "accountId", "jso_file"], 
+            (name, date, userId, drawJson)
+        )
+    
         return drawID
 
     def getDraws(self, userId):

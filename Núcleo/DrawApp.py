@@ -3,6 +3,7 @@
 # pick a color and a filename.
 from windows.saveFile import SaveFile
 from windows.loadFile import LoadFile
+from windows.admin import Admin
 import turtle
 import tkinter
 import tkinter.colorchooser
@@ -218,13 +219,7 @@ class DrawingApplication(tkinter.Frame):
         if self.adminState:
 
             def adminMgmt():
-                createUser = tkinter.Tk()
-                createUser.title("Admin")
-                createUser.geometry("400x600")
-                createUser.configure(background = 'white')
-                createUser.resizable(0,0)
-
-                createUser.mainloop()
+                Admin([])
 
             fileMenu.add_command(label="Soy admin",command=adminMgmt)
 
