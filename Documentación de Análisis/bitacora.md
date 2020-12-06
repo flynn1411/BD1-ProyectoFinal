@@ -27,3 +27,10 @@ el programa.
 - (Gabriel y Fernando) Arreglo de bug de la venta de login, se conecto el mysqlConector con la ventana de login para poder hacer las verificaciones, se creo la clase encriptación al igual que la ventana para las modificaciones del usuario. El programa ya distigue entre los tipos de usuario. Se agregaron variables para futuros arreglos como lo es el engine y el id de usuario con su nombre casi listo para poder almacenar info en la base de datos.
 
 - (Caleb y Josué) Completación del archivo DDS.sql para la base de datos A asi como su diagrama ER.
+
+## Sabado 5 de Diciembre 
+
+- (Gabriel y Fernando): Se crearon las ventanas para la carga y guardado de dibujo. Se implementaron las interfaces creadas al proyecto. Tambien se alteraron métodos de la aplicación del dibujo, estos cambios abarcan la manera en como el programa guardaba los archivos json, el programa original guardaba los archivos json en el directorio seleccionado por el usuario. Debido a esto se necesito alterar el proceso de guardado y carga de tal manera que todo los archivos guardados se encuentren en la base de datos. Para cargar un dibujo ahora es necesario hacer transacciones tomando en cuenta el usuario actual. 
+
+## Sabado 6 de Diciembre 
+- (Gabriel): Se creó la ventana para la administración de usuarios el cual solamente sera accedido por el usuario con privilegios de Administrador.
