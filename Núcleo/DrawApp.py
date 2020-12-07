@@ -219,7 +219,9 @@ class DrawingApplication(tkinter.Frame):
         if self.adminState:
 
             def adminMgmt():
-                Admin([])
+                usersList = self.engine.getOperatorUser()
+                print(usersList)
+                Admin(usersList)
 
             fileMenu.add_command(label="Soy admin",command=adminMgmt)
 

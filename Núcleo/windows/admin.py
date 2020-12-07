@@ -3,7 +3,7 @@ import tkinter.messagebox
 
 class Admin:
 
-    def __init__(self, drawList):
+    def __init__(self, usersList):
 
         #Ventana principal
         self.userMgmt = tkinter.Tk()
@@ -28,8 +28,9 @@ class Admin:
         scrollbar.pack(side="right", fill="y")
         self.list.config(yscrollcommand=scrollbar.set)
 
-        for drawID, drawName in drawList:
-            self.list.insert(drawID, drawName)
+        for userID, username in usersList:
+            print(username)
+            self.list.insert(userID, username)
 
         self.list.bind('<<ListboxSelect>>', self.onselect)
 

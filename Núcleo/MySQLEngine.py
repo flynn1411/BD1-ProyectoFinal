@@ -35,7 +35,7 @@ class MySQLEngine:
         tupleStr = []
         for _ in range(len(dataElement)):
             tupleStr.append("%s")
-            
+
         addElement = "INSERT INTO %s (%s) VALUES (%s)" % (tableName, ",".join(argsList), ",".join(tupleStr) )
 
         self.link.execute(addElement, dataElement)
@@ -59,4 +59,8 @@ class MySQLEngine:
 
     def getDraws(self, userId):
         result = self.select("SELECT Drawing.id, Drawing.txt_fileName FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
+        return result
+
+    def getOperatorUser(self):
+        result = self.select("SELECT * FROM OperatorUsers")
         return result
