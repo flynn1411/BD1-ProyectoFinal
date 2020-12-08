@@ -64,3 +64,7 @@ class MySQLEngine:
     def getOperatorUser(self):
         result = self.select("SELECT * FROM OperatorUsers")
         return result
+
+    def getDrawByID(self, drawID):
+        result = self.select("SELECT jso_file FROM Drawing WHERE id = %s" % drawID)
+        return result[0][0]

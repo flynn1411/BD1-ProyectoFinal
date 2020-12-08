@@ -118,15 +118,16 @@ class PyList:
 # that a DrawingApplication is like a Frame object except for the code
 # written here which redefines/extends the behavior of a Frame. 
 class DrawingApplication(tkinter.Frame):
-    def __init__(self, master=None,adminState=False, user = None,engine = None):
+    def __init__(self, master=None,adminState=False, user = None,engine = None, currentDrawID = None):
         super().__init__(master)
+        self.currentDrawID = currentDrawID
         self.user = user
         self.engine = engine
         self.adminState = adminState
         self.pack()
         self.buildWindow()    
         self.graphicsCommands = PyList()
- 
+
     # This method is called to create all the widgets, place them in the GUI,
     # and define the event handlers for the application.
     def buildWindow(self):
@@ -162,11 +163,8 @@ class DrawingApplication(tkinter.Frame):
         fileMenu.add_command(label="New",command=newWindow)
 
         # The parse function adds the contents of an json file to the sequence.
-        def parse(filename):
-            f= open(filename, "r")
-            jsonStr = f.read()
-            drawJSON = json.loads(jsonStr)
-            f.close()
+        def parse(drawJsonStr):
+            drawJSON = json.loads(drawJsonStr)
             
             for commandElement in drawJSON["GraphicsCommands"]:
                 command = commandElement["command"]
@@ -211,7 +209,28 @@ class DrawingApplication(tkinter.Frame):
         #Abrir los dibujos
         def loadFileButton():
             result = self.engine.getDraws(self.user["userId"])
-            LoadFile(result)
+            LoadFile(self, result, updateDrawScreen)
+            
+    
+        def updateDrawScreen(drawID):            
+            self.currentDrawID = drawID
+            drawJson = self.engine.getDrawByID(drawID)
+
+            newWindow()
+
+            # This re-initializes the sequence for the new picture. 
+            self.graphicsCommands = PyList()
+            
+            # calling parse will read the graphics commands from the file.
+            parse(drawJson)
+               
+            for cmd in self.graphicsCommands:
+                cmd.draw(theTurtle)
+                
+            # This line is necessary to update the window after the picture is drawn.
+            screen.update()
+            
+
             
         fileMenu.add_command(label="Load",command=loadFileButton)
         

@@ -3,9 +3,9 @@ import tkinter.messagebox
 
 class LoadFile:
 
-    def __init__(self, drawList):
-
-        self.load = tkinter.Tk()
+    def __init__(self, master, drawList, updateDrawScreen):
+        self.update = updateDrawScreen
+        self.load = tkinter.Toplevel(master)
         self.load.title("Upload drawings")
         self.load.geometry("500x470")
         self.load.resizable(0,0)
@@ -26,25 +26,27 @@ class LoadFile:
         self.currentDrawLabel = tkinter.Label(self.load, text = "", font=('arial', 12))
         self.currentDrawLabel.place(x=190,y=370)
         
-        
-        for drawID, drawName in drawList:
-            self.list.insert(drawID, drawName)
+        self.drawDict = {}
+        for drawID, drawName in drawList:    
+            self.drawDict[drawName] = drawID
+            self.list.insert('end', drawName)
 
         self.buttonLoad = tkinter.Button(self.load, text="Open", font=('arial', 12), cursor='hand2', command=self.loadDraw)
         self.buttonLoad.place(x=50,y=420, width=80)
         
-        self.list.bind('<<ListboxSelect>>', self.onselect)
-        self.load.mainloop() 
+        self.list.bind('<<ListboxSelect>>', self.onselect)        
 
     def onselect(self,e):
         w = e.widget
-        index = int(w.curselection()[0])
-        value = w.get(index)
+        drawIndex = int(w.curselection()[0])
+        value = w.get(drawIndex)
         self.currentDrawLabel.configure(text=value)
 
     def loadDraw(self):
         name = self.currentDrawLabel.cget('text')
         if(name):
+            self.update(self.drawDict[name])
             self.load.destroy()
+
         else:
             tkinter.messagebox.showinfo(message="select a file", title="save error") 

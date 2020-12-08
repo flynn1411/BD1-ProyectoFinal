@@ -87,7 +87,7 @@ class Admin:
 
     def onselect(self,e):
         w = e.widget
-        index = int(w.curselection()[0])
+        index = int(w.curselection())
         value = w.get(index)
         self.currentUserLabel.configure(text=value)
 
