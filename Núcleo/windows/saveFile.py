@@ -3,11 +3,11 @@ import tkinter.messagebox
 
 class SaveFile:
 
-    def __init__(self, drawJson, userId, engine = None):
+    def __init__(self, userId, drawJson, insertDraw = None):
         
-        self.drawJson = drawJson
         self.userID = userId
-        self.Engine = engine
+        self.drawJson = drawJson
+        self.insertDraw = insertDraw
 
 
         self.save = tkinter.Tk()
@@ -25,7 +25,7 @@ class SaveFile:
     def saveDraw(self):
         name = self.filename.get()
         if(name):
-            self.Engine.insertDraw( name, self.userID, self.drawJson)
+            self.insertDraw(name, self.userID, self.drawJson)
             self.save.destroy()
         else:
             tkinter.messagebox.showinfo(message="Add a file name", title="save error") 

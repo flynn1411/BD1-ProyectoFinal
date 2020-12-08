@@ -43,6 +43,22 @@ class MySQLEngine:
         self.con.commit()
         return elementId
 
+    def update(self, elementID, tableName, argsList = [], dataList = []):
+        updateList = []
+        for i in range(len(dataList)):
+            updateList.append("%s = %s" % (argsList[i], dataList[i]))
+
+        updateSQL = "UPDATE %s SET %s WHERE id = %s" % (tableName, ",".join(updateList), elementID)
+        try:
+            self.link.execute(updateSQL)
+            self.con.commit()
+            return True
+        except:
+            print("Error durante la actualización")
+            return False
+        
+
+
     def generalCallProcedure(self, procedureName, argsList):
         result_args = self.link.callproc(procedureName, argsList)
         return result_args[-1]
@@ -66,5 +82,9 @@ class MySQLEngine:
         return result
 
     def getDrawByID(self, drawID):
-        result = self.select("SELECT jso_file FROM Drawing WHERE id = %s" % drawID)
-        return result[0][0]
+        result = self.select("SELECT txt_fileName, jso_file FROM Drawing WHERE id = %s" % drawID)
+        return result[0]
+
+    def updateDraw(self, drawID, drawJson):
+        return self.update(drawID, "Drawing", ["jso_file"], ["'%s'" % drawJson])
+        

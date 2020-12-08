@@ -118,9 +118,9 @@ class PyList:
 # that a DrawingApplication is like a Frame object except for the code
 # written here which redefines/extends the behavior of a Frame. 
 class DrawingApplication(tkinter.Frame):
-    def __init__(self, master=None,adminState=False, user = None,engine = None, currentDrawID = None):
+    def __init__(self, master=None,adminState=False, user = None,engine = None, currentDraw = {}):
         super().__init__(master)
-        self.currentDrawID = currentDrawID
+        self.currentDraw = currentDraw
         self.user = user
         self.engine = engine
         self.adminState = adminState
@@ -133,8 +133,7 @@ class DrawingApplication(tkinter.Frame):
     def buildWindow(self):
         
         # The master is the root window. The title is set as below. 
-        self.master.title("DrawApp3000Ultra - Usuario: %s" % self.user["username"])
-        
+        self.master.title("Untitled - Usuario: %s" % (self.user["username"]))
         # Here is how to create a menu bar. The tearoff=0 means that menus
         # can't be separated from the window which is a feature of tkinter.
         bar = tkinter.Menu(self.master)
@@ -202,7 +201,20 @@ class DrawingApplication(tkinter.Frame):
         #Guardar los dibujos
         def saveFileButton():
             drawJson = createJson()
-            SaveFile(drawJson, self.user["userId"], self.engine)
+
+            if("id" in self.currentDraw):
+                self.engine.updateDraw(self.currentDraw["id"], drawJson)
+            else:
+                SaveFile(self.user["userId"], drawJson, newDrawSave)
+
+        def newDrawSave(nameDraw, userID, drawJson):
+            drawID = self.engine.insertDraw( nameDraw, userID, drawJson)
+            self.currentDraw = {
+                "id" : drawID,
+                "name" : nameDraw,
+                "file" : drawJson
+            }
+            updateTitle()
 
         fileMenu.add_command(label="Save",command=saveFileButton)
 
@@ -211,18 +223,23 @@ class DrawingApplication(tkinter.Frame):
             result = self.engine.getDraws(self.user["userId"])
             LoadFile(self, result, updateDrawScreen)
             
-    
+        #Actualizar la pantalla de dibujo
         def updateDrawScreen(drawID):            
-            self.currentDrawID = drawID
-            drawJson = self.engine.getDrawByID(drawID)
+            nameDraw, drawJson = self.engine.getDrawByID(drawID)
+            self.currentDraw = {
+                "id" : drawID,
+                "name" : nameDraw,
+                "file" : drawJson
+            }
 
+            updateTitle()
             newWindow()
 
             # This re-initializes the sequence for the new picture. 
             self.graphicsCommands = PyList()
             
             # calling parse will read the graphics commands from the file.
-            parse(drawJson)
+            parse(self.currentDraw["file"])
                
             for cmd in self.graphicsCommands:
                 cmd.draw(theTurtle)
@@ -255,8 +272,15 @@ class DrawingApplication(tkinter.Frame):
               
             return json.dumps(jsonDraw)
 
+        def updateTitle():
+            self.master.title("%s - Usuario: %s" % (
+                self.currentDraw["name"] if "name" in self.currentDraw else "Untitled",
+                self.user["username"]
+            ))
+
+
         #fileMenu.add_command(label="Exit",command=self.master.quit)
-        
+
         bar.add_cascade(label="File",menu=fileMenu)
         
         # This tells the root window to display the newly created menu bar.
