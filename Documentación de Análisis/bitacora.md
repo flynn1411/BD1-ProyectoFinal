@@ -35,3 +35,11 @@ el programa.
 ## Domingo 6 de Diciembre 
 - (Gabriel): Se creó la ventana para la administración de usuarios el cual solamente sera accedido por el usuario con privilegios de Administrador. Se agregó una vista a la base de datos para la visualizacion de los usuarios operadores, esta ha sido implementada en la ventana del administrador. En el mySQLEngine se creó un método general para el insertado de datos y tambien se agregaron los metodos necesarios para la visualizacion de los usuarios operadores seleccionando la vista creada previamente.
 
+## Lunes 7 de Diciembre
+
+- (Caleb y Josué): Se comenzaron a trabajar en los triggers para automatizar la bitacora en la base A.
+
+## Martes 8 de Diciembre
+
+- (Caleb y Josué): Se crearón más Triggers para los otros eventos existentes mencionados en la definición del proyecto. Asi como la documentación del los scripts SQL.
+
