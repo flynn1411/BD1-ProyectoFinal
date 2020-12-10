@@ -43,3 +43,7 @@ el programa.
 
 - (Caleb y Josué): Se crearón más Triggers para los otros eventos existentes mencionados en la definición del proyecto. Asi como la documentación del los scripts SQL.
 
+## Miercoles 9 de Diciembre
+
+- (Caleb y Josué): Se agregó el campo "txt_elementName" en la bitacora de la base A, esto con la intención de obtener una tabla de registros más detallada. Asímismo se logró hacer una comparación de contraseña más exacta (tomando en cuenta las mayusculas y minusculas).
+
