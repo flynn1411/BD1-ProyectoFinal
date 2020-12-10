@@ -224,11 +224,11 @@ class DrawingApplication(tkinter.Frame):
             LoadFile(self, result, updateDrawScreen)
             
         #Actualizar la pantalla de dibujo
-        def updateDrawScreen(drawID):            
-            nameDraw, drawJson = self.engine.getDrawByID(drawID)
+        def updateDrawScreen(drawID, name):            
+            drawJson = self.engine.getDrawByID(drawID)
             self.currentDraw = {
                 "id" : drawID,
-                "name" : nameDraw,
+                "name" : name,
                 "file" : drawJson
             }
 
