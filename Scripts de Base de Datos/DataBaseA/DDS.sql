@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS LogBook;
 CREATE TABLE Role(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_roleName CHAR(8) NOT NULL
-);
+)COMMENT = "Se llena mediante un insert, para asignarle un rol a cada usuario existente en la tabla Account";
 
 /*Insertamos los roles correspondientes en la tabla (Role)*/
 INSERT INTO Role ( txt_roleName ) VALUES
@@ -45,7 +45,7 @@ CREATE TABLE Account(
     txt_password TEXT NOT NULL,
     id_role INT NOT NULL DEFAULT 2,
     CONSTRAINT fk_id_role FOREIGN KEY (id_role) REFERENCES Role(id) ON DELETE CASCADE
-);
+) COMMENT = "Se llena mediante un insert, debe de existir el usuario para que pueda iniciar sesión";
 
 /*Creamos la tabla (Config) con el fin de poder guardar la configuración de casa usuario que realizara 
 dibujos, hemos definido varios atributos que se describen en dicha tabla, además hemos 
@@ -59,7 +59,7 @@ CREATE TABLE Config(
     int_radius INT,
     accountId INT NOT NULL,
     CONSTRAINT fk_accountId FOREIGN KEY (accountId) REFERENCES Account(id) ON DELETE CASCADE
-);
+)COMMENT = "Se llena cuando el usario modifica valores en la interfaz gráfica, estos se guardan en dicha tabla";
 
 /*Creamos la tabla (Drawing) con el fin de cuando un usuario cree un dibujo esta pueda guardar 
 el dibujo que realizo el usuario en un formato json, asignandole un nombre de archivo a cada 
@@ -71,14 +71,14 @@ CREATE TABLE Drawing(
    accountId INT,
    jso_file JSON,
    CONSTRAINT fk_owner_Id FOREIGN KEY (accountId) REFERENCES Account(id) ON DELETE CASCADE
-);
+)COMMENT = "Se llena cuando el usuario crea y guarda los dibujos";
 
 /*Creamos está tabla para poder identificar cada acción que realizan los 
 usarios, por ejemplo, moficar o crear un dibujo.*/
 CREATE TABLE Action(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_actionName CHAR(15) NOT NULL
-);
+)COMMENT = "Se llena mediante un trigger ";
 
 /*Insertamos valores en la tabla Action, estos nos indicarán que 
 acción realizo el usuario cuando este dibujando.*/
@@ -95,7 +95,7 @@ CREATE TABLE Element(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     txt_elementType CHAR(15) NOT NULL
 
-);
+)COMMENT = "Se llena cuando el usuario, inicia sesión, identificando";
 
 /*Insertamos valores en la Tabla (Element) esta nos indicará*/
 INSERT INTO Element ( txt_elementType ) VALUES
@@ -117,6 +117,6 @@ CREATE TABLE LogBook(
     CONSTRAINT fk_account_id FOREIGN KEY (accountId) REFERENCES Account(id) ON DELETE CASCADE,
     CONSTRAINT fk_actionId FOREIGN KEY (actionId) REFERENCES Action(id) ON DELETE CASCADE,
     CONSTRAINT fk_id_elementId FOREIGN KEY (elementId) REFERENCES Element(id) ON DELETE CASCADE
-);
+)COMMENT = "Se llena mediante triggers, registrando todo acerca de los usuarios que iniciaron sesión";
 
 
