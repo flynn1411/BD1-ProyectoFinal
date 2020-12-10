@@ -45,7 +45,7 @@ class LoadFile:
     def loadDraw(self):
         name = self.currentDrawLabel.cget('text')
         if(name):
-            self.update(self.drawDict[name])
+            self.update(self.drawDict[name], name)
             self.load.destroy()
 
         else:

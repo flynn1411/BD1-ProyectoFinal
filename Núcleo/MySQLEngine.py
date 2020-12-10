@@ -82,7 +82,7 @@ class MySQLEngine:
         return result
 
     def getDrawByID(self, drawID):
-        result = self.select("SELECT txt_fileName, jso_file FROM Drawing WHERE id = %s" % drawID)
+        result = self.select("SELECT jso_file FROM Drawing WHERE id = %s" % drawID)
         return result[0]
 
     def updateDraw(self, drawID, drawJson):
