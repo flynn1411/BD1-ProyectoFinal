@@ -87,7 +87,7 @@ CREATE TRIGGER accountCreated_trigger
 
 CREATE TRIGGER configModified_trigger
     AFTER UPDATE
-    ON Drawing FOR EACH ROW
+    ON Config FOR EACH ROW
         BEGIN
             INSERT INTO LogBook (accountId,actionId, elementId, tim_recordDate) VALUES (
                 NEW.accountId,
