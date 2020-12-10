@@ -38,10 +38,10 @@ CREATE PROCEDURE GetDrawingByID (IN drawingID INT, OUT drawing_json JSON)
       BEGIN
         DECLARE drawingName TEXT;
         DECLARE accountID INT;
-        
-        SELECT jso_file INTO drawing_json FROM Drawing WHERE id = drawingID;        
 
-        IF jso_file IS NOT NULL THEN
+        SELECT Drawing.jso_file INTO drawing_json FROM Drawing WHERE Drawing.id = drawingID;        
+
+        IF drawing_json IS NOT NULL THEN
 
 
           SELECT Drawing.accountId INTO accountID FROM Drawing WHERE id=drawingID;
