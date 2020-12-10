@@ -88,3 +88,8 @@ class MySQLEngine:
     def updateDraw(self, drawID, drawJson):
         return self.update(drawID, "Drawing", ["jso_file"], ["'%s'" % drawJson])
         
+    def loginUser(self, userAcc, passwordAcc):
+        userID = self.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
+        admin = self.generalCallProcedure('GetRole',[userAcc, passwordAcc, '@userID'])
+
+        return (userID, admin)

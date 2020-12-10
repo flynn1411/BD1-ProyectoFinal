@@ -30,10 +30,11 @@ class Login:
         self.passE.place(x=150,y=100,height=30)
 
         #Boton para ejecutar la verificacion edl usuario 
-        self.loginButton = tkinter.Button(self.login,text="LOGIN",cursor='hand2',command=self.getValues).place(x=150,y=150)
+        self.loginButton = tkinter.Button(self.login,text="LOGIN",cursor='hand2',command=self.getValues)
+        self.loginButton.place(x=150,y=150)
 
         #Loop para que la ventana se mantenga abierta
-        self.login.mainloop()
+        
 
 
     def getValues(self):
@@ -43,8 +44,7 @@ class Login:
         #passwordAcc =  encryptor.encrypt(self.passE.get(),"root")
         passwordAcc =  self.passE.get()
         
-        userID = self.engine.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
-        admin = self.engine.generalCallProcedure('GetRole',[userAcc, passwordAcc, '@userID'])
+        userID, admin = self.engine.loginUser(userAcc, passwordAcc)
 
         if userID:
             if admin == "ADMIN":
@@ -56,8 +56,7 @@ class Login:
             tkinter.messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error") 
        
     def paint(self, user):
-
-        self.login.withdraw()
+        #self.login.withdraw()
         self.login.destroy()
         root = tkinter.Tk()  
         drawingApp = DrawingApplication(root, self.adminState, user, self.engine)  

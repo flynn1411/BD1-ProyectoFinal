@@ -19,6 +19,8 @@ CREATE PROCEDURE Auth (IN username TEXT,IN accPassword TEXT, OUT userID INT)
               );
           END IF;
 
+          COMMIT;
+
        END//
 delimiter ;
 
