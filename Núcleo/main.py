@@ -9,4 +9,6 @@ config = ConnectionConfig("localhost", "3306", "root", "root", "BaseA")
 
 engine = MySQLEngine(config)
 
-Login(engine)
+
+window = Login(engine)
+window.login.mainloop()
