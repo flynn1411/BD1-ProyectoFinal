@@ -226,6 +226,7 @@ class DrawingApplication(tkinter.Frame):
         #Actualizar la pantalla de dibujo
         def updateDrawScreen(drawID, name):            
             drawJson = self.engine.getDrawByID(drawID)
+            print(drawJson)
             self.currentDraw = {
                 "id" : drawID,
                 "name" : name,

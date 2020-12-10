@@ -82,8 +82,10 @@ class MySQLEngine:
         return result
 
     def getDrawByID(self, drawID):
+        print("sas")
         result = self.generalCallProcedure("GetDrawingByID", [drawID, '@drawing_json'])
-        return result[0][0]
+        print(result)
+        return result
 
     def updateDraw(self, drawID, drawJson):
         return self.update(drawID, "Drawing", ["jso_file"], ["'%s'" % drawJson])
