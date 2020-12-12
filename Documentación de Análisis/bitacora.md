@@ -37,13 +37,13 @@ el programa.
 
 ## Lunes 7 de Diciembre
 
-- (Gabriel): Se modificó el programa de tal manera que al momento de cargar un dibujo la pantalla del dibujo se actualize con el dibujo seleccionado.
+- (Gabriel): Se modificó el programa de tal manera que al momento de cargar un dibujo la pantalla del dibujo se actualice con el dibujo seleccionado.
 
 - (Caleb y Josué): Se comenzaron a trabajar en los triggers para automatizar la bitacora en la base A.
 
 ## Martes 8 de Diciembre
 
-- (Gabriel): Se llevo a cabo la tarea de elaborar el código necesario para llevar a cabo la carga de los dibujos en el programa. Esto consiste en crear un atributo con el id del dibujo en la aplicación que se vaya alterando cuando se crea o carga un nuevo dibujo.
+- (Gabriel): Se llevó a cabo la tarea de elaborar el código necesario para generar la carga de los dibujos en el programa. Esto consiste en crear un atributo con el id del dibujo en la aplicación que se vaya alterando cada vez que se haya cargado o creado un nuevo dibujo.
 
 - (Caleb y Josué): Se crearón más Triggers para los otros eventos existentes mencionados en la definición del proyecto. Asi como la documentación del los scripts SQL.
 
