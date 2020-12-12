@@ -2,6 +2,8 @@ DROP TRIGGER IF EXISTS drawingCreated_trigger;
 DROP TRIGGER IF EXISTS drawingModified_trigger;
 DROP TRIGGER IF EXISTS drawingDeleted_trigger;
 DROP TRIGGER IF EXISTS accountCreated_trigger;
+DROP TRIGGER IF EXISTS accountModified_trigger;
+DROP TRIGGER IF EXISTS accountDeleted_trigger;
 
 
 /*Creamos este Trigger para que después que se inserte en la tabla Drawing, registrar cuando un usuario crea 
@@ -81,6 +83,19 @@ CREATE TRIGGER accountCreated_trigger
                     NEW.txt_name,
                     NOW()
                 );
+        END$$
+
+CREATE TRIGGER accountModified_trigger
+    AFTER UPDATE
+    ON Account FOR EACH ROW
+        BEGIN
+            INSERT INTO LogBook (accountId, actionId, elementId, txt_elementName, tim_recordDate) VALUES (
+                1,
+                2,
+                3,
+                NEW.txt_name,
+                NOW()
+            );
         END$$
 
 CREATE TRIGGER accountDeleted_trigger
