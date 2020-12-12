@@ -37,16 +37,21 @@ el programa.
 
 ## Lunes 7 de Diciembre
 
+- (Gabriel): Se modificó el programa de tal manera que al momento de cargar un dibujo la pantalla del dibujo se actualize con el dibujo seleccionado.
+
 - (Caleb y Josué): Se comenzaron a trabajar en los triggers para automatizar la bitacora en la base A.
 
 ## Martes 8 de Diciembre
 
+- (Gabriel): Se llevo a cabo la tarea de elaborar el código necesario para llevar a cabo la carga de los dibujos en el programa. Esto consiste en crear un atributo con el id del dibujo en la aplicación que se vaya alterando cuando se crea o carga un nuevo dibujo.
+
 - (Caleb y Josué): Se crearón más Triggers para los otros eventos existentes mencionados en la definición del proyecto. Asi como la documentación del los scripts SQL.
 
 ## Miercoles 9 de Diciembre
+- (Gabriel): Se cambiaron algunas consultas basicas dentro del motor de mysql por procedimientos almacenados escritos en la parte de la base de datos.
 
 - (Caleb y Josué): Se agregó el campo "txt_elementName" en la bitacora de la base A, esto con la intención de obtener una tabla de registros más detallada. Asímismo se logró hacer una comparación de contraseña más exacta (tomando en cuenta las mayusculas y minusculas).
 
 ## Viernes 11 de Diciembre 
 
--(Gabriel y Fernando) Se organizaro algunas funciones de la ventana de admin al igual que se agregaron la funcionalidad completa de agregar usuarios y poder modificarlos cambiando su nombre y contraseña, se implemento correctamente la verificacion en las tablas para verificar si al agregar un usuario el usuario ya existe en la base de datos y de igual forma para la modificacion de un usuario no puede agregar el mismo nombre de un usuario ya existente. Se agrego el reconocimiento de la configuracion de el lapiz su color el radio y lo ancho de lapiz y desde el modo usuario se puede modificarlos y que se guarden los valores en la base de datos.
+- (Gabriel y Fernando) Se organizaron algunas funciones de la ventana de admin al igual que se agregaron la funcionalidad completa de agregar usuarios y poder modificarlos cambiando su nombre y contraseña, se implemento correctamente la verificación en las tablas para verificar si al agregar un usuario el usuario ya existe en la base de datos y de igual forma para la modificacion de un usuario no puede agregar el mismo nombre de un usuario ya existente. Se agrego el reconocimiento de la configuración de el lapiz su color el radio y lo ancho de lapiz y desde el modo usuario se puede modificarlos y que se guarden los valores en la base de datos.
