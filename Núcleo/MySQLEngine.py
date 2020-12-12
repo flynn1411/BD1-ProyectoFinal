@@ -82,8 +82,7 @@ class MySQLEngine:
         return result
 
     def getDrawByID(self, drawID):
-        print("sas")
-        result = self.generalCallProcedure("GetDrawingByID", [drawID, '@drawing_json'])
+        result = self.generalCallProcedure("GetDrawingByID_SP", [drawID, '@drawing_json'])
         print(result)
         return result
 
@@ -91,7 +90,19 @@ class MySQLEngine:
         return self.update(drawID, "Drawing", ["jso_file"], ["'%s'" % drawJson])
         
     def loginUser(self, userAcc, passwordAcc):
-        userID = self.generalCallProcedure('Auth',[userAcc, passwordAcc, '@userID'])
-        admin = self.generalCallProcedure('GetRole',[userAcc, passwordAcc, '@userID'])
+        userID = self.generalCallProcedure('Auth_SP',[userAcc, passwordAcc, '@userID'])
+        admin = self.generalCallProcedure('GetRole_SP',[userAcc, passwordAcc, '@userID'])
 
         return (userID, admin)
+
+    def getUserConfig(self,userID):
+        return self.select("SELECT * FROM Config WHERE accountId=%s" % userID)[0]
+
+    def updateUserConfigByAdmin(self, configValues):
+        self.generalCallProcedure('UpdateConfigByAdmin_SP', configValues)
+
+    def createOperatorUser(self, username, password):
+        return self.generalCallProcedure('AddAccount_SP', [username, password, '@exist'])
+
+    def updateOperatorUser(self, userID, username, password):
+        return self.generalCallProcedure('UpdateAccount_SP', [userID, username, password, '@exist'])

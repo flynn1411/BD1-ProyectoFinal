@@ -1,9 +1,11 @@
 import tkinter
 import tkinter.messagebox
+from windows.userInput import UserInput
 
 class Admin:
 
-    def __init__(self, usersList):
+    def __init__(self, engine):
+        self.engine = engine
 
         #Ventana principal
         self.userMgmt = tkinter.Tk()
@@ -16,7 +18,7 @@ class Admin:
         self.userListLabel.place(x=50,y=20)
 
         #Botón para crear nuevos usuarios operadores
-        self.addButton = tkinter.Button(self.userMgmt, text="Add", font=('arial', 12), cursor='hand2')
+        self.addButton = tkinter.Button(self.userMgmt, text="Add", font=('arial', 12), cursor='hand2', command=self.addUser)
         self.addButton.place(x=370,y=20, width=80)
 
         #Widget para la lista de usuarios
@@ -28,9 +30,13 @@ class Admin:
         scrollbar.pack(side="right", fill="y")
         self.list.config(yscrollcommand=scrollbar.set)
 
+        usersList = engine.getOperatorUser()
+        self.users = {}
+        counter = 0
         for userID, username in usersList:
-            print(username)
-            self.list.insert(userID, username)
+            self.users[username] = userID
+            self.list.insert(counter, username)
+            counter += 1
 
         self.list.bind('<<ListboxSelect>>', self.onselect)
 
@@ -44,10 +50,10 @@ class Admin:
         
         
         #User admin butons
-        self.buttonUpdate = tkinter.Button(self.userMgmt, text="Update", font=('arial', 12), cursor='hand2')
+        self.buttonUpdate = tkinter.Button(self.userMgmt, text="Update", font=('arial', 12), cursor='hand2', command=self.updateUser)
         self.buttonUpdate.place(x=50,y=400, width=80)
         
-        self.buttonDelete = tkinter.Button(self.userMgmt, text="Delete", font=('arial', 12), cursor='hand2')
+        self.buttonDelete = tkinter.Button(self.userMgmt, text="Delete", font=('arial', 12), cursor='hand2',command=self.deleteUser)
         self.buttonDelete.place(x=150,y=400, width=80)
         
 
@@ -79,16 +85,73 @@ class Admin:
         self.widthEntry = tkinter.Entry(self.userMgmt, font=('arial',13))
         self.widthEntry.place(x=200,y=605, height=28 )
 
+
         #save config
-        self.saveConfigButton = tkinter.Button(self.userMgmt, text="Save Config", font=('arial', 12), cursor='hand2')
+        self.saveConfigButton = tkinter.Button(self.userMgmt, text="Save Config", font=('arial', 12), cursor='hand2',command=self.saveConfig)
         self.saveConfigButton.place(x=185,y=650, width=120)
 
         self.userMgmt.mainloop() 
 
     def onselect(self,e):
         w = e.widget
-        index = int(w.curselection())
-        value = w.get(index)
-        self.currentUserLabel.configure(text=value)
+        index = w.curselection()
+        self.username = w.get(index)
+        self.currentUserLabel.configure(text=self.username)
+
+        userID = self.users[self.username]
+        #Agregar sus valores de configuracion para
+        
+        self.penColorEntry.delete(0,tkinter.END)
+        self.fillColorEntry.delete(0,tkinter.END)
+        self.radiusEntry.delete(0,tkinter.END)
+        self.widthEntry.delete(0,tkinter.END)
+       
+        configList = self.engine.getUserConfig(userID)
+
+        penColorDB = configList[1]
+        fillColorDB = configList[2]
+        radiusDB = configList[4]
+        widthDB = configList[3]
+
+        self.penColorEntry.insert(0,penColorDB)
+        self.fillColorEntry.insert(0,fillColorDB)
+        self.radiusEntry.insert(0,radiusDB)
+        self.widthEntry.insert(0,widthDB)
 
 
+
+    def addUser(self):
+        username = ""
+        mode = "signUp"
+        UserInput(self.engine, username, self.updateOperatorUser, mode)
+
+
+    def updateUser(self):
+        mode = "update"
+        UserInput(self.engine, self.username, self.updateOperatorUser, mode)
+       
+    def deleteUser(self):
+        pass
+   
+    def saveConfig(self):
+        
+        userID = self.users[self.username]
+
+        penColorDB = self.penColorEntry.get()
+        fillColorDB = self.fillColorEntry.get()
+        radiusDB = self.radiusEntry.get()
+        widthDB = self.widthEntry.get()
+        
+        self.engine.updateUserConfigByAdmin([userID,penColorDB,fillColorDB,radiusDB,widthDB])
+
+
+    def updateOperatorUser(self):
+
+        self.list.delete(0,tkinter.END)
+        usersList = self.engine.getOperatorUser()
+        self.users = {}
+        counter = 0
+        for userID, username in usersList:
+            self.users[username] = userID
+            self.list.insert(counter, username)
+            counter += 1

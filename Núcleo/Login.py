@@ -33,10 +33,7 @@ class Login:
         self.loginButton = tkinter.Button(self.login,text="LOGIN",cursor='hand2',command=self.getValues)
         self.loginButton.place(x=150,y=150)
 
-        #Loop para que la ventana se mantenga abierta
-        
-
-
+       
     def getValues(self):
 
         #obtner los valores de los entry para el usuario y la contraseña 

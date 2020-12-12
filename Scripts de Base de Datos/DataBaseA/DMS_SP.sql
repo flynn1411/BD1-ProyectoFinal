@@ -1,25 +1,32 @@
 USE BaseA;
 
-DROP PROCEDURE IF EXISTS Auth;
-DROP PROCEDURE IF EXISTS GetRole;
+DROP PROCEDURE IF EXISTS Auth_SP;
+DROP PROCEDURE IF EXISTS GetRole_SP;
+DROP PROCEDURE IF EXISTS GetDrawingByID_SP;
+DROP PROCEDURE IF EXISTS AddAccount_SP;
+DROP PROCEDURE IF EXISTS UpdateAccount_SP;
+DROP PROCEDURE IF EXISTS UpdateConfigByAdmin_SP;
+DROP PROCEDURE IF EXISTS UpdateConfigByUser_SP;
 
 delimiter //
 
-CREATE PROCEDURE Auth (IN username TEXT,IN accPassword TEXT, OUT userID INT)
+CREATE PROCEDURE Auth_SP (IN username TEXT,IN accPassword TEXT, OUT userID INT)
        BEGIN
          SELECT Account.id INTO userID FROM Account
-         WHERE (Account.txt_name = username) AND ( BINARY Account.txt_password = accPassword);
+         WHERE (BINARY Account.txt_name = username) AND ( BINARY Account.txt_password = accPassword);
 
          IF userID IS NOT NULL THEN
-            INSERT INTO LogBook(accountId, actionId, elementId, tim_recordDate) VALUES(
+            INSERT INTO LogBook(accountId, actionId, elementId, txt_elementName, tim_recordDate) VALUES(
                 userID,
                 4,
                 3,
+                CONCAT(username,'-AUTHED'),
                 NOW()
               );
+          COMMIT;
+
           END IF;
 
-          COMMIT;
 
        END//
 delimiter ;
@@ -28,13 +35,13 @@ delimiter //
 
 /*DROP PROCEDURE GetRole;*/
 
-CREATE PROCEDURE GetRole (IN username TEXT,IN accPassword TEXT, OUT typeAcc CHAR(8))
+CREATE PROCEDURE GetRole_SP (IN username TEXT,IN accPassword TEXT, OUT typeAcc CHAR(8))
        BEGIN
          SELECT Role.txt_roleName INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
-         WHERE (Account.txt_name = username) AND (Account.txt_password = accPassword) ;
+         WHERE (BINARY Account.txt_name = username) AND (BINARY Account.txt_password = accPassword) ;
        END//
 
-CREATE PROCEDURE GetDrawingByID (IN drawingID INT, OUT drawing_json JSON)
+CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
       BEGIN
         DECLARE drawingName TEXT;
         DECLARE accountID INT;
@@ -54,11 +61,89 @@ CREATE PROCEDURE GetDrawingByID (IN drawingID INT, OUT drawing_json JSON)
                   drawingName,
                   NOW()
                 );
+          COMMIT;
 
         END IF;
         
-        COMMIT;
       END//
+
+
+CREATE PROCEDURE AddAccount_SP (IN username TEXT, IN accPassword TEXT, OUT valid INT)
+      BEGIN
+        SELECT Account.id INTO valid FROM Account WHERE (Account.txt_name = username);
+
+        IF valid IS NULL THEN
+          INSERT INTO Account(txt_name, txt_password) 
+          VALUES
+          (
+            username,
+            accPassword
+          );
+          COMMIT;
+        END IF;
+
+      END//
+
+CREATE PROCEDURE UpdateAccount_SP (IN affectedUser INT, IN username TEXT, IN accPassword TEXT, OUT exist INT)
+  BEGIN
+
+    SELECT Account.id INTO exist FROM Account WHERE (Account.txt_name = username);
+
+        IF exist IS NULL THEN
+          UPDATE Account SET
+            txt_name = username,
+            txt_password = accPassword
+          WHERE id = affectedUser;
+
+          COMMIT;
+        END IF;
+
+    COMMIT;
+  END//
+
+CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor CHAR(7), IN fillcolor CHAR(7), IN radius INT, IN width INT)
+  BEGIN
+    DECLARE userName TEXT;
+
+    UPDATE Config SET
+      txt_penColor = pencolor,
+      txt_fillColor = fillcolor,
+      int_radius = radius,
+      int_width = width
+    WHERE
+      accountID = affectedUserID;
+
+    SELECT Account.txt_name INTO userName FROM Account WHERE (BINARY Account.id = affectedUserID);
+
+    INSERT INTO LogBook (accountId, actionId, elementId, txt_elementName, tim_recordDate) VALUES (
+      1,
+      2,
+      2,
+      CONCAT(userName, '_configFile'),
+      NOW()
+    );
+    COMMIT;
+  END//
+
+
+CREATE PROCEDURE UpdateConfigByUser_SP (IN affectedUserID INT, IN pencolor CHAR(7), IN fillcolor CHAR(7), IN radius INT, IN width INT)
+  BEGIN
+    UPDATE Config SET
+      txt_penColor = pencolor,
+      txt_fillColor = fillcolor,
+      int_width = width,
+      int_radius = radius
+    WHERE
+      accountID = affectedUserID;
+
+    INSERT INTO LogBook (accountId, actionId, elementId, tim_recordDate) VALUES (
+      affectedUserID,
+      2,
+      2,
+      NOW()
+    );
+    COMMIT;
+  END//
 
 delimiter ; 
 /*
