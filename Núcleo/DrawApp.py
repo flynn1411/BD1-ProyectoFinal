@@ -128,10 +128,18 @@ class DrawingApplication(tkinter.Frame):
         self.buildWindow()    
         self.graphicsCommands = PyList()
 
+
     # This method is called to create all the widgets, place them in the GUI,
     # and define the event handlers for the application.
     def buildWindow(self):
         
+        self.configArray = self.engine.getUserConfig(self.user["userId"])
+
+        self.penColorDB = self.configArray[1]
+        self.fillColorDB = self.configArray[2]
+        self.radiusDB = self.configArray[4]
+        self.widthDB = self.configArray[3]
+
         # The master is the root window. The title is set as below. 
         self.master.title("Untitled - Usuario: %s" % (self.user["username"]))
         # Here is how to create a menu bar. The tearoff=0 means that menus
@@ -321,16 +329,28 @@ class DrawingApplication(tkinter.Frame):
         # the contents of the entry widget and widthSize.set(val) to set the value
         # of the entry widget to val. Initially the widthSize is set to 1. str(1) is 
         # needed because the entry widget must be given a string. 
+
+        def widthHandler(self):
+            saveValue = widthEntry.get() 
+            print(saveValue)
+
         widthSize = tkinter.StringVar()
         widthEntry = tkinter.Entry(sideBar,textvariable=widthSize)
+        widthEntry.bind("<KeyRelease>", widthHandler) #keyup 
         widthEntry.pack()
-        widthSize.set(str(1))
+        widthSize.set(str(self.widthDB))
         
+
+        def radiusHandler(self):
+            saveValue = radiusEntry.get() 
+            print(saveValue)
+
         radiusLabel = tkinter.Label(sideBar,text="Radius")
         radiusLabel.pack()
         radiusSize = tkinter.StringVar()
         radiusEntry = tkinter.Entry(sideBar,textvariable=radiusSize)
-        radiusSize.set(str(10))
+        radiusEntry.bind("<KeyRelease>", radiusHandler) #keyup 
+        radiusSize.set(str(self.radiusDB))
         radiusEntry.pack()
         
         # A button widget calls an event handler when it is pressed. The circleHandler
@@ -359,34 +379,53 @@ class DrawingApplication(tkinter.Frame):
         # number ranging from 00-FF. The same applies for Blue and Green values. The 
         # color choosers below return a string representing the selected color and a slice
         # is taken to extract the #RRGGBB hexadecimal string that the color choosers return.
+      
+
+        def penColorHandler(event=None):
+            saveValue = penEntry.get() 
+            print(saveValue)
+
+
+
         screen.colormode(255)
         penLabel = tkinter.Label(sideBar,text="Pen Color")
         penLabel.pack()
         penColor = tkinter.StringVar()
         penEntry = tkinter.Entry(sideBar,textvariable=penColor)
+        penEntry.bind("<KeyRelease>", penColorHandler) #keyup 
         penEntry.pack()
         # This is the color black.
-        penColor.set("#000000")  
-        
+        penColor.set(self.penColorDB)  
+
+       
         def getPenColor():
             color = tkinter.colorchooser.askcolor()
             if color != None:
                 penColor.set(str(color)[-9:-2])
+                penColorHandler()
+
             
         penColorButton = tkinter.Button(sideBar, text = "Pick Pen Color", command=getPenColor)
         penColorButton.pack(fill=tkinter.BOTH)           
             
+
+        def fillColorHandler(event = None):
+            saveValue = fillEntry.get() 
+            print(saveValue)
+
         fillLabel = tkinter.Label(sideBar,text="Fill Color")
         fillLabel.pack()
         fillColor = tkinter.StringVar()
         fillEntry = tkinter.Entry(sideBar,textvariable=fillColor)
+        fillEntry.bind("<KeyRelease>", fillColorHandler) #keyup 
         fillEntry.pack()
-        fillColor.set("#000000")     
+        fillColor.set(self.fillColorDB)     
         
         def getFillColor():
             color = tkinter.colorchooser.askcolor()
-            if color != None:    
+            if color != None:  
                 fillColor.set(str(color)[-9:-2])       
+                fillColorHandler()  
    
         fillColorButton = \
             tkinter.Button(sideBar, text = "Pick Fill Color", command=getFillColor)
