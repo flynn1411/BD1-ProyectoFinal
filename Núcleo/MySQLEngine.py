@@ -101,3 +101,6 @@ class MySQLEngine:
 
     def updateUserConfigByUser(self, configValues):
         self.generalCallProcedure('UpdateConfigByUser_SP', configValues)
+    
+    def deleteDrawByID(self, drawID):
+        self.generalCallProcedure('DeleteDrawingByID_SP', [drawID])

@@ -166,6 +166,8 @@ class DrawingApplication(tkinter.Frame):
             theTurtle.pendown()  
             screen.update()
             screen.listen()
+            self.currentDraw = {}
+            updateTitle()
             self.graphicsCommands = PyList()
             
         fileMenu.add_command(label="New",command=newWindow)
@@ -216,6 +218,11 @@ class DrawingApplication(tkinter.Frame):
             else:
                 SaveFile(self.user["userId"], drawJson, newDrawSave)
 
+        def saveAsFileButton():
+            drawJson = createJson()
+            self.currentDraw = {}
+            SaveFile(self.user["userId"], drawJson, newDrawSave)
+
         #Abrir los dibujos
         def loadFileButton():
             result = self.engine.getDraws(self.user["userId"])
@@ -258,10 +265,12 @@ class DrawingApplication(tkinter.Frame):
 
         fileMenu.add_command(label="Save",command=saveFileButton)
 
-        def saveAsFileButton():
+        fileMenu.add_command(label="Save as",command=saveAsFileButton)
+
+        def downloadButton():
             pass
 
-        fileMenu.add_command(label="Save as",command=saveAsFileButton)
+        fileMenu.add_command(label="Download",command=downloadButton)
         
         #Ventana de administrador 
         if self.adminState:

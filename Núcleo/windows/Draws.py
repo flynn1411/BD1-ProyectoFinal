@@ -38,8 +38,21 @@ class Draws:
     def onselect(self,e):
         w = e.widget
         drawIndex = int(w.curselection()[0])
-        value = w.get(drawIndex)
-        self.currentDrawLabel.configure(text=value)
+        self.value = w.get(drawIndex)
+        self.currentDrawLabel.configure(text=self.value)
 
     def deleteDraw(self):
-        pass
+        print(self.drawsDict[self.value])
+        self.engine.deleteDrawByID(self.drawsDict[self.value])
+        self.updateDraws()
+    
+    def updateDraws(self):
+
+        self.list.delete(0,tkinter.END)
+        result = self.engine.getDraws(self.userID)
+        self.draws = {}
+        counter = 0
+        for drawID, fileName in result:
+            self.draws[fileName] = drawID
+            self.list.insert(counter, fileName)
+            counter += 1

@@ -78,7 +78,7 @@ CREATE PROCEDURE DeleteDrawingByID_SP (IN drawingID INT)
         IF drawingExists IS NOT NULL THEN
           DELETE FROM Drawing
           WHERE Drawing.id = drawingID;
-
+          COMMIT;
         END IF;
         
       END//
