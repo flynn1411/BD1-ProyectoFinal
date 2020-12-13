@@ -107,4 +107,6 @@ class MySQLEngine:
     def updateOperatorUser(self, userID, username, password):
         return self.generalCallProcedure('UpdateAccount_SP', [userID, username, password, '@exist'])
 
+    def updateUserConfigByUser(self, configValues):
+        self.generalCallProcedure('UpdateConfigByUser_SP', configValues)
     

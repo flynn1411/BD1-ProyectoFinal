@@ -9,6 +9,7 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 import json
+import re
 
 # The following classes define the different commands that 
 # are supported by the drawing application. 
@@ -323,6 +324,29 @@ class DrawingApplication(tkinter.Frame):
         # This is a label widget. Packing it puts it at the top of the sidebar.
         pointLabel = tkinter.Label(sideBar,text="Width")
         pointLabel.pack()
+
+        
+        def configHandler(event=None):
+            
+            patternColor = r"^#[a-fA-F0-9]{6}$" 
+            resultPenColor = re.match(patternColor,penEntry.get())
+            resultFillColor = re.match(patternColor,fillEntry.get())
+      
+            patterNumberSize = r"^\d+$"
+
+            resultRadius = re.match(patterNumberSize,radiusEntry.get())
+            resultWidth = re.match(patterNumberSize,widthEntry.get())
+
+            print(resultRadius,"Radio")
+            print(resultWidth,"Width")
+
+            if resultPenColor and resultFillColor and resultRadius and resultWidth:
+                print("in")
+                self.engine.updateUserConfigByUser([self.user["userId"],penEntry.get(),fillEntry.get(),radiusEntry.get(),widthEntry.get()])
+            else:
+                print("Valores de la configuracion incompletos")
+
+
         
         # This entry widget allows the user to pick a width for their lines. 
         # With the widthSize variable below you can write widthSize.get() to get
@@ -330,26 +354,19 @@ class DrawingApplication(tkinter.Frame):
         # of the entry widget to val. Initially the widthSize is set to 1. str(1) is 
         # needed because the entry widget must be given a string. 
 
-        def widthHandler(self):
-            saveValue = widthEntry.get() 
-            print(saveValue)
-
         widthSize = tkinter.StringVar()
         widthEntry = tkinter.Entry(sideBar,textvariable=widthSize)
-        widthEntry.bind("<KeyRelease>", widthHandler) #keyup 
+        widthEntry.bind("<KeyRelease>", configHandler) #keyup 
         widthEntry.pack()
         widthSize.set(str(self.widthDB))
         
 
-        def radiusHandler(self):
-            saveValue = radiusEntry.get() 
-            print(saveValue)
 
         radiusLabel = tkinter.Label(sideBar,text="Radius")
         radiusLabel.pack()
         radiusSize = tkinter.StringVar()
         radiusEntry = tkinter.Entry(sideBar,textvariable=radiusSize)
-        radiusEntry.bind("<KeyRelease>", radiusHandler) #keyup 
+        radiusEntry.bind("<KeyRelease>", configHandler) #keyup 
         radiusSize.set(str(self.radiusDB))
         radiusEntry.pack()
         
@@ -379,20 +396,13 @@ class DrawingApplication(tkinter.Frame):
         # number ranging from 00-FF. The same applies for Blue and Green values. The 
         # color choosers below return a string representing the selected color and a slice
         # is taken to extract the #RRGGBB hexadecimal string that the color choosers return.
-      
-
-        def penColorHandler(event=None):
-            saveValue = penEntry.get() 
-            print(saveValue)
-
-
 
         screen.colormode(255)
         penLabel = tkinter.Label(sideBar,text="Pen Color")
         penLabel.pack()
         penColor = tkinter.StringVar()
         penEntry = tkinter.Entry(sideBar,textvariable=penColor)
-        penEntry.bind("<KeyRelease>", penColorHandler) #keyup 
+        penEntry.bind("<KeyRelease>", configHandler) #keyup 
         penEntry.pack()
         # This is the color black.
         penColor.set(self.penColorDB)  
@@ -402,22 +412,18 @@ class DrawingApplication(tkinter.Frame):
             color = tkinter.colorchooser.askcolor()
             if color != None:
                 penColor.set(str(color)[-9:-2])
-                penColorHandler()
+                configHandler()
 
             
         penColorButton = tkinter.Button(sideBar, text = "Pick Pen Color", command=getPenColor)
         penColorButton.pack(fill=tkinter.BOTH)           
             
 
-        def fillColorHandler(event = None):
-            saveValue = fillEntry.get() 
-            print(saveValue)
-
         fillLabel = tkinter.Label(sideBar,text="Fill Color")
         fillLabel.pack()
         fillColor = tkinter.StringVar()
         fillEntry = tkinter.Entry(sideBar,textvariable=fillColor)
-        fillEntry.bind("<KeyRelease>", fillColorHandler) #keyup 
+        fillEntry.bind("<KeyRelease>", configHandler) #keyup 
         fillEntry.pack()
         fillColor.set(self.fillColorDB)     
         
@@ -425,7 +431,7 @@ class DrawingApplication(tkinter.Frame):
             color = tkinter.colorchooser.askcolor()
             if color != None:  
                 fillColor.set(str(color)[-9:-2])       
-                fillColorHandler()  
+                configHandler()  
    
         fillColorButton = \
             tkinter.Button(sideBar, text = "Pick Fill Color", command=getFillColor)

@@ -1,6 +1,8 @@
 import tkinter
+import re
 import tkinter.messagebox
 from windows.userInput import UserInput
+
 
 class Admin:
 
@@ -137,12 +139,20 @@ class Admin:
         
         userID = self.users[self.username]
 
-        penColorDB = self.penColorEntry.get()
-        fillColorDB = self.fillColorEntry.get()
-        radiusDB = self.radiusEntry.get()
-        widthDB = self.widthEntry.get()
-        
-        self.engine.updateUserConfigByAdmin([userID,penColorDB,fillColorDB,radiusDB,widthDB])
+        patternColor = "^#[a-fA-F0-9]{6}$" 
+        resultPenColor = re.match(patternColor,self.penColorEntry.get())
+        resultFillColor = re.match(patternColor,self.fillColorEntry.get())
+    
+        patterNumberSize = r"^\d+$"
+
+        resultRadius = re.match(patterNumberSize,self.radiusEntry.get())
+        resultWidth = re.match(patterNumberSize,self.widthEntry.get())
+
+        if resultPenColor and resultFillColor and resultRadius and resultWidth:
+            print("Valores completos ")
+            self.engine.updateUserConfigByAdmin([userID,self.penColorEntry.get(),self.fillColorEntry.get(),self.radiusEntry.get(),self.widthEntry.get()])
+        else:
+              tkinter.messagebox.showinfo(message="Configuracion incompleta o incorrecta", title="Config error") 
 
 
     def updateOperatorUser(self):
