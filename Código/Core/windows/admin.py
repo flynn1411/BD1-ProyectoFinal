@@ -126,31 +126,36 @@ class Admin:
     def updateUser(self):
         mode = "update"
         self.currentUserLabel.configure(text="")
-        UserInput(self.userMgmt,self.engine, self.username, self.updateOperatorUser, mode)
+        oldUsername = self.username
+        self.username = None
+        UserInput(self.userMgmt,self.engine, oldUsername, self.updateOperatorUser, mode)
        
     def deleteUser(self):
         userID = self.users[self.username]
         self.engine.deleteUserByID(userID)
         self.currentUserLabel.configure(text="")
+        self.username = None
         self.updateOperatorUser()
-   
+
     def saveConfig(self):
+        if(self.username):
+            userID = self.users[self.username]
+
+            patternColor = "^#[a-fA-F0-9]{6}$" 
+            resultPenColor = re.match(patternColor,self.penColorEntry.get())
+            resultFillColor = re.match(patternColor,self.fillColorEntry.get())
         
-        userID = self.users[self.username]
+            patterNumberSize = r"^\d+$"
 
-        patternColor = "^#[a-fA-F0-9]{6}$" 
-        resultPenColor = re.match(patternColor,self.penColorEntry.get())
-        resultFillColor = re.match(patternColor,self.fillColorEntry.get())
-    
-        patterNumberSize = r"^\d+$"
+            resultRadius = re.match(patterNumberSize,self.radiusEntry.get())
+            resultWidth = re.match(patterNumberSize,self.widthEntry.get())
 
-        resultRadius = re.match(patterNumberSize,self.radiusEntry.get())
-        resultWidth = re.match(patterNumberSize,self.widthEntry.get())
-
-        if resultPenColor and resultFillColor and resultRadius and resultWidth:
-            self.engine.updateUserConfigByAdmin([userID,self.penColorEntry.get(),self.fillColorEntry.get(),self.radiusEntry.get(),self.widthEntry.get()])
+            if resultPenColor and resultFillColor and resultRadius and resultWidth:
+                self.engine.updateUserConfigByAdmin([userID,self.penColorEntry.get(),self.fillColorEntry.get(),self.radiusEntry.get(),self.widthEntry.get()])
+            else:
+                tkinter.messagebox.showinfo(message="Configuracion incompleta o incorrecta", title="Config error") 
         else:
-              tkinter.messagebox.showinfo(message="Configuracion incompleta o incorrecta", title="Config error") 
+            tkinter.messagebox.showinfo(message="No se ha seleccionado un usuario", title="Config error") 
 
 
     def updateOperatorUser(self):

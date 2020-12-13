@@ -249,7 +249,6 @@ class DrawingApplication(tkinter.Frame):
             updateTitle()
             newWindow()            
             self.graphicsCommands = PyList()
-            
             parse(drawJson)
                
             #Hace el dibujo   
