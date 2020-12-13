@@ -96,12 +96,6 @@ CREATE TRIGGER encryptAccountUpdate_trigger
                 BaseB.Account.id = NEW.id;
         END$$
 
-CREATE TRIGGER encryptDrawingUpdate_trigger
-    BEFORE UPDATE
-    ON Drawing FOR EACH ROW
-        BEGIN
-            SET NEW.txt_fileName = HEX(AES_ENCRYPT(NEW.txt_fileName, 'root'));
-        END$$
 
 CREATE TRIGGER encryptConfingUpdate_trigger
     BEFORE UPDATE
