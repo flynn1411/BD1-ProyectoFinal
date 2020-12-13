@@ -84,10 +84,14 @@ class MySQLEngine:
 
     def getUserConfig(self,userID):
         configID,penColor,fillColor,width,radius,userID = self.select("SELECT id, AES_DECRYPT(UNHEX(txt_penColor), 'root'), AES_DECRYPT(UNHEX(txt_fillColor), 'root'), AES_DECRYPT(UNHEX(int_width), 'root'), AES_DECRYPT(UNHEX(int_radius), 'root'), accountId FROM Config WHERE accountId=%s" % userID)[0]
-        penColor= penColor.decode("utf-8")    
-        fillColor= fillColor.decode("utf-8")    
-        width= width.decode("utf-8")    
-        radius= radius.decode("utf-8")    
+        if( type(penColor) != str ):
+            penColor= penColor.decode("utf-8")    
+        if( type(fillColor) != str ):
+            fillColor= fillColor.decode("utf-8")    
+        if( type(width) != str ):
+            width= width.decode("utf-8")
+        if( type(radius) != str ):    
+            radius= radius.decode("utf-8")    
 
         return (configID,penColor,fillColor,width,radius,userID)
 

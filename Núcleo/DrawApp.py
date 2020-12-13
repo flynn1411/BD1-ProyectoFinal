@@ -231,13 +231,15 @@ class DrawingApplication(tkinter.Frame):
             
         #Actualizar la pantalla de dibujo
         def updateDrawScreen(drawID, name):        
-            name = name.decode("utf-8")    
+            if type(name) != str : 
+                name = name.decode("utf-8")    
             drawJson = self.engine.getDrawByID(drawID)
-            drawJson = drawJson.decode("utf-8")
+            if type(drawJson) != str : 
+                drawJson = drawJson.decode("utf-8")
             self.currentDraw = {
                 "id" : drawID,
                 "name" : name,
-                "file" : drawJson
+                "file" : json.dumps(json.loads(drawJson))
             }
             updateTitle()
             newWindow()
@@ -247,7 +249,7 @@ class DrawingApplication(tkinter.Frame):
             
             # calling parse will read the graphics commands from the file.
             #print(self.currentDraw["file"])
-            print("--------------1")
+            print("--------------")
             print(self.currentDraw["file"])
             print("--------------")
             parse(self.currentDraw["file"])
