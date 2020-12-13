@@ -175,6 +175,7 @@ class DrawingApplication(tkinter.Frame):
         # The parse function adds the contents of an json file to the sequence.
         def parse(drawJsonStr):
             drawJSON = json.loads(drawJsonStr)
+            print(drawJSON)
             
             for commandElement in drawJSON["GraphicsCommands"]:
                 command = commandElement["command"]
@@ -229,14 +230,15 @@ class DrawingApplication(tkinter.Frame):
             LoadFile(self, result, updateDrawScreen,"load")
             
         #Actualizar la pantalla de dibujo
-        def updateDrawScreen(drawID, name):            
+        def updateDrawScreen(drawID, name):        
+            name = name.decode("utf-8")    
             drawJson = self.engine.getDrawByID(drawID)
+            drawJson = drawJson.decode("utf-8")
             self.currentDraw = {
                 "id" : drawID,
                 "name" : name,
                 "file" : drawJson
             }
-
             updateTitle()
             newWindow()
 
@@ -244,6 +246,10 @@ class DrawingApplication(tkinter.Frame):
             self.graphicsCommands = PyList()
             
             # calling parse will read the graphics commands from the file.
+            #print(self.currentDraw["file"])
+            print("--------------1")
+            print(self.currentDraw["file"])
+            print("--------------")
             parse(self.currentDraw["file"])
                
             for cmd in self.graphicsCommands:

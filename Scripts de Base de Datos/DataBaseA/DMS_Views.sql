@@ -5,7 +5,7 @@ DROP VIEW IF EXISTS OperatorUsers;
 CREATE VIEW OperatorUsers AS
     SELECT
         id,
-        txt_name 
+        AES_DECRYPT(UNHEX(txt_name), 'root') 
     FROM
         Account
     WHERE

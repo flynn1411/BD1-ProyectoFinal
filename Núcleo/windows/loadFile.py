@@ -1,6 +1,6 @@
 import tkinter
 import tkinter.messagebox
-
+#Ventana para Cargar o Descargar archivos
 class LoadFile:
 
     def __init__(self, master, drawList, loadFunc,mode):
@@ -18,7 +18,6 @@ class LoadFile:
             self.nameLabel = tkinter.Label(self.load, text = "Download Drawing", font=('arial', 20))
             self.buttonLoad = tkinter.Button(self.load, text="Download", font=('arial', 12), cursor='hand2', command=self.downloadDraw)
        
-
         self.nameLabel.place(x=50,y=20)
 
         self.list = tkinter.Listbox(self.load, font=('arial', 15))

@@ -63,7 +63,7 @@ class MySQLEngine:
         return result
 
     def getDraws(self, userId):
-        result = self.select("SELECT Drawing.id, Drawing.txt_fileName FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
+        result = self.select("SELECT Drawing.id, AES_DECRYPT(UNHEX(Drawing.txt_fileName),'root') FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
         return result
 
     def getOperatorUser(self):
@@ -83,7 +83,13 @@ class MySQLEngine:
         return (userID, admin)
 
     def getUserConfig(self,userID):
-        return self.select("SELECT Config.id,AES_DECRYPT(UNHEX(Config.txt_penColor), 'root'), AES_DECRYPT(UNHEX(Config.txt_fillColor), 'root'), AES_DECRYPT(UNHEX(Config.int_width), 'root'), AES_DECRYPT(UNHEX(Config.int_radius), 'root'), AES_DECRYPT(UNHEX(Config.accountId), 'root') FROM Config WHERE accountId=%s" % userID)[0]
+        configID,penColor,fillColor,width,radius,userID = self.select("SELECT id, AES_DECRYPT(UNHEX(txt_penColor), 'root'), AES_DECRYPT(UNHEX(txt_fillColor), 'root'), AES_DECRYPT(UNHEX(int_width), 'root'), AES_DECRYPT(UNHEX(int_radius), 'root'), accountId FROM Config WHERE accountId=%s" % userID)[0]
+        penColor= penColor.decode("utf-8")    
+        fillColor= fillColor.decode("utf-8")    
+        width= width.decode("utf-8")    
+        radius= radius.decode("utf-8")    
+
+        return (configID,penColor,fillColor,width,radius,userID)
 
     def updateUserConfigByAdmin(self, configValues):
         self.generalCallProcedure('UpdateConfigByAdmin_SP', configValues)

@@ -100,12 +100,12 @@ CREATE TRIGGER encryptConfingUpdate_trigger
             SET NEW.int_radius = HEX(AES_ENCRYPT(NEW.int_radius, 'root'));
 
             UPDATE BaseB.Config SET
-                BaseB.Config.txt_penColor = NEW.txt_penColor,
-                BaseB.Config.txt_fillColor = NEW.txt_fillColor,
-                BaseB.Config.int_width = NEW.int_width,
-                BaseB.Config.int_radius = NEW.int_radius
+                BaseB.txt_penColor = NEW.txt_penColor,
+                BaseB.txt_fillColor = NEW.txt_fillColor,
+                BaseB.int_width = NEW.int_width,
+                BaseB.int_radius = NEW.int_radius
             WHERE
-                BaseB.Config.accountId = NEW.accountId;
+                BaseB.accountId = NEW.accountId;
         END$$
 /*delimiter ;
 /*Este Trigger lo definimos para que después de que se inserte en Account, registre ciertos 

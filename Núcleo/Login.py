@@ -4,10 +4,10 @@ import tkinter.filedialog
 from DrawApp import DrawingApplication
 from ConnectionConfig import ConnectionConfig
 from MySQLEngine import MySQLEngine
-from Encrypt import Encryptor
 
 class Login:
     def __init__(self,engine):
+        
         self.engine = engine
         self.adminState = False
         #Ventana para logear a los usuarios y sus atributos
@@ -36,9 +36,7 @@ class Login:
        
     def getValues(self):
 
-        #obtner los valores de los entry para el usuario y la contraseña 
         userAcc = self.userE.get()
-        #passwordAcc =  encryptor.encrypt(self.passE.get(),"root")
         passwordAcc =  self.passE.get()
         
         userID, admin = self.engine.loginUser(userAcc, passwordAcc)
@@ -53,7 +51,7 @@ class Login:
             tkinter.messagebox.showinfo(message="El usuario o la contraseña es incorrecta", title="Login error") 
        
     def paint(self, user):
-        #self.login.withdraw()
+
         self.login.destroy()
         root = tkinter.Tk()  
         root.resizable(0,0)

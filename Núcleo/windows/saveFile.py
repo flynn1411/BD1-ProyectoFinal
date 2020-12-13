@@ -1,6 +1,6 @@
 import tkinter
 import tkinter.messagebox
-
+#Guardar archivo
 class SaveFile:
 
     def __init__(self, userId, drawJson, insertDraw = None):
@@ -8,7 +8,6 @@ class SaveFile:
         self.userID = userId
         self.drawJson = drawJson
         self.insertDraw = insertDraw
-
 
         self.save = tkinter.Tk()
         self.save.title("Save Drawing")

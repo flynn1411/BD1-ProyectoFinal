@@ -40,7 +40,7 @@ delimiter //
 
 CREATE PROCEDURE GetRole_SP (IN username TEXT,IN accPassword TEXT, OUT typeAcc CHAR(8))
        BEGIN
-         SELECT Role.txt_roleName INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
+         SELECT AES_DECRYPT(UNHEX(Role.txt_roleName), 'root') INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
          WHERE (BINARY Account.txt_name = HEX(AES_ENCRYPT(username, 'root'))) AND (BINARY Account.txt_password = HEX(AES_ENCRYPT(accPassword, 'root'))) ;
        END//
 
@@ -61,7 +61,7 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
                   accountID,
                   1,
                   1,
-                  drawingName,
+                  AES_DECRYPT(UNHEX(drawingName), 'root'),
                   NOW()
                 );
           COMMIT;
