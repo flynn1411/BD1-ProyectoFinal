@@ -22,7 +22,7 @@ INSERT INTO Element ( txt_elementType ) VALUES
 /*TRUNCATE TABLE Account;*/
 
 INSERT INTO Account ( txt_name , txt_password, id_role) VALUES
-    ("SoyAdmin", "admin",1)
+    ("root", "root",1)
 ;
 
 INSERT INTO Account ( txt_name , txt_password) VALUES
