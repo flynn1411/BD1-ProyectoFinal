@@ -18,10 +18,6 @@ DROP TABLE IF EXISTS Config;
 /*Borramos la tabla Drawing en caso de que exista*/
 DROP TABLE IF EXISTS Drawing;
 
-DROP TABLE IF EXISTS Action;
-
-DROP TABLE IF EXISTS Element;
-
 /*Creamos la tabla (Role) para poder asignarle un role a cada usuario que sea ingresado en la tabla Account*/
 CREATE TABLE Role(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -69,34 +65,3 @@ CREATE TABLE Drawing(
    jso_file BLOB,
    CONSTRAINT fk_owner_Id FOREIGN KEY (accountId) REFERENCES Account(id) ON DELETE CASCADE
 )COMMENT = "Se llena cuando el usuario crea y guarda los dibujos";
-
-/*Creamos está tabla para poder identificar cada acción que realizan los 
-usarios, por ejemplo, moficar o crear un dibujo.*/
-CREATE TABLE Action(
-    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    txt_actionName CHAR(15) NOT NULL
-)COMMENT = "Se llena mediante un trigger ";
-
-/*Insertamos valores en la tabla Action, estos nos indicarán que 
-acción realizo el usuario cuando este dibujando.*/
-INSERT INTO Action ( txt_actionName ) VALUES
-    ("VIZUALIZACION"),
-    ("MODIFICACION"),
-    ("ELIMINACION"),
-    ("AUTENTICACION"),
-    ("CREACION")
-;
-
-/*Creamos esta tabla para poder saber el tipo de elemento que realizo el usuario*/
-CREATE TABLE Element(
-    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    txt_elementType CHAR(15) NOT NULL
-
-)COMMENT = "Se llena cuando el usuario, inicia sesión, identificando";
-
-/*Insertamos valores en la Tabla (Element) esta nos indicará*/
-INSERT INTO Element ( txt_elementType ) VALUES
-    ("DIBUJO"),
-    ("CONFIGURACION"),
-    ("USUARIO")
-;

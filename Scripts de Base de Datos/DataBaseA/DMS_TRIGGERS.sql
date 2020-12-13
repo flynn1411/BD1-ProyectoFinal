@@ -93,13 +93,7 @@ CREATE TRIGGER accountCreated_trigger
                 NEW.id
                 );*/
                 
-            /*Se registra que el usuario se creó por parte del único administrador
-            INSERT INTO BaseB.Account (txt_name, txt_password, id_role) VALUES
-                (
-                    NEW.txt_name,
-                    NEW.txt_password,
-                    NEW.id_role
-                );*/
+           INSERT INTO BaseB.Account SELECT * FROM BaseA.Account WHERE BaseA.Account.id = NEW.id;
         END$$
 
 CREATE TRIGGER accountModified_trigger

@@ -35,7 +35,7 @@ class UserInput:
 
         if(windowType == "signUp"):
             #Boton para ejecutar la verificacion edl usuario 
-            self.loginButton = tkinter.Button(self.userInput,text="SING IN",cursor='hand2',command=self.newUser)
+            self.loginButton = tkinter.Button(self.userInput,text="SIGN UP",cursor='hand2',command=self.newUser)
         else: 
             self.loginButton = tkinter.Button(self.userInput,text="UPGRADE",cursor='hand2',command=self.updateUser)
 
