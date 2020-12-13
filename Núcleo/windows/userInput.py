@@ -2,17 +2,16 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 
-
 class UserInput:
     def __init__(self,engine, username, updateWindow,windowType = None):
         self.updateWindow = updateWindow
         self.engine = engine
-        self.adminState = False
         self.userInput = tkinter.Tk()
         self.userInput.geometry("400x200")
         self.userInput.configure(background = 'white')
         self.userInput.resizable(0,0)
         self.oldUsername = username
+
         if(windowType == "signUp"):
             #Ventana para logear a los usuarios y sus atributos
             self.userInput.title("New user")
@@ -34,7 +33,6 @@ class UserInput:
         self.passE = tkinter.Entry(self.userInput,show="*")
         self.passE.place(x=150,y=100,height=30)
 
-
         if(windowType == "signUp"):
             #Boton para ejecutar la verificacion edl usuario 
             self.loginButton = tkinter.Button(self.userInput,text="SING IN",cursor='hand2',command=self.newUser)
@@ -42,7 +40,6 @@ class UserInput:
             self.loginButton = tkinter.Button(self.userInput,text="UPGRADE",cursor='hand2',command=self.updateUser)
 
         self.loginButton.place(x=150,y=150)
-        
         self.userInput.mainloop()
 
     def newUser(self):
@@ -52,13 +49,11 @@ class UserInput:
         passwordAcc =  self.passE.get()
        
         exists = self.engine.createOperatorUser(userAcc,passwordAcc)
-        print(exists)
         if not exists:
             self.updateWindow()
             self.userInput.destroy()
         else:
             tkinter.messagebox.showinfo(message="El usuario ya existe", title="Sign in error") 
-
     
     def updateUser(self):
 
@@ -71,9 +66,7 @@ class UserInput:
                 oldID = userID
                 break
 
-
         exist = self.engine.updateOperatorUser(oldID,userAcc,passwordAcc)
-        print(exist)
         if not exist:
             self.updateWindow()
             self.userInput.destroy()

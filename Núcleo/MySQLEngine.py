@@ -20,9 +20,6 @@ class MySQLEngine:
             database = self.database
         )
 
-        #versión texto de con
-        print("Versión de texto del objeto de conexión a MySQL: %s" % (self.con))
-
         #Enlace
         self.link = self.con.cursor()
     
@@ -56,8 +53,6 @@ class MySQLEngine:
         except:
             print("Error durante la actualización")
             return False
-        
-
 
     def generalCallProcedure(self, procedureName, argsList):
         result_args = self.link.callproc(procedureName, argsList)
@@ -70,7 +65,6 @@ class MySQLEngine:
             ["txt_fileName", "tim_date", "accountId", "jso_file"], 
             (name, date, userId, drawJson)
         )
-    
         return drawID
 
     def getDraws(self, userId):
@@ -83,7 +77,6 @@ class MySQLEngine:
 
     def getDrawByID(self, drawID):
         result = self.generalCallProcedure("GetDrawingByID_SP", [drawID, '@drawing_json'])
-        print(result)
         return result
 
     def updateDraw(self, drawID, drawJson):
@@ -92,7 +85,6 @@ class MySQLEngine:
     def loginUser(self, userAcc, passwordAcc):
         userID = self.generalCallProcedure('Auth_SP',[userAcc, passwordAcc, '@userID'])
         admin = self.generalCallProcedure('GetRole_SP',[userAcc, passwordAcc, '@userID'])
-
         return (userID, admin)
 
     def getUserConfig(self,userID):
@@ -109,4 +101,3 @@ class MySQLEngine:
 
     def updateUserConfigByUser(self, configValues):
         self.generalCallProcedure('UpdateConfigByUser_SP', configValues)
-    
