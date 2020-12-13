@@ -1,9 +1,9 @@
 # The imports include turtle graphics and tkinter modules. 
 # The colorchooser and filedialog modules let the user
 # pick a color and a filename.
-from windows.saveFile import SaveFile
-from windows.loadFile import LoadFile
-from windows.admin import Admin
+from .windows.saveFile import SaveFile
+from .windows.loadFile import LoadFile
+from .windows.admin import Admin
 import turtle
 import tkinter
 import tkinter.colorchooser
@@ -175,7 +175,6 @@ class DrawingApplication(tkinter.Frame):
         # The parse function adds the contents of an json file to the sequence.
         def parse(drawJsonStr):
             drawJSON = json.loads(drawJsonStr)
-            print(drawJSON)
             
             for commandElement in drawJSON["GraphicsCommands"]:
                 command = commandElement["command"]
@@ -226,6 +225,7 @@ class DrawingApplication(tkinter.Frame):
 
         #Abrir los dibujos
         def loadFileButton():
+            #result es una lista de tuplas que representan un dibujo como (id, nombre)
             result = self.engine.getDraws(self.user["userId"])
             LoadFile(self, result, updateDrawScreen,"load")
             
@@ -236,28 +236,27 @@ class DrawingApplication(tkinter.Frame):
             drawJson = self.engine.getDrawByID(drawID)
             if type(drawJson) != str : 
                 drawJson = drawJson.decode("utf-8")
+
+            
             self.currentDraw = {
                 "id" : drawID,
                 "name" : name,
-                "file" : json.dumps(json.loads(drawJson))
+                "fileJson" : json.dumps(json.loads(drawJson))
             }
+            
+            
+            #Vacia el dibujo 
             updateTitle()
-            newWindow()
-
-            # This re-initializes the sequence for the new picture. 
+            newWindow()            
             self.graphicsCommands = PyList()
             
-            # calling parse will read the graphics commands from the file.
-            #print(self.currentDraw["file"])
-            print("--------------")
-            print(self.currentDraw["file"])
-            print("--------------")
-            parse(self.currentDraw["file"])
+            parse(drawJson)
                
+            #Hace el dibujo   
             for cmd in self.graphicsCommands:
                 cmd.draw(theTurtle)
-                
-            # This line is necessary to update the window after the picture is drawn.
+            
+            #Actualiza la interfaz del dibujo
             screen.update()
             
         fileMenu.add_command(label="Load",command=loadFileButton)
@@ -268,7 +267,7 @@ class DrawingApplication(tkinter.Frame):
                 self.currentDraw = {
                     "id" : drawID,
                     "name" : nameDraw,
-                    "file" : drawJson
+                    "fileJson" : drawJson
                 }
                 updateTitle()
                 return drawID

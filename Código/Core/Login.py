@@ -1,9 +1,9 @@
 import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
-from DrawApp import DrawingApplication
-from ConnectionConfig import ConnectionConfig
-from MySQLEngine import MySQLEngine
+from .DrawApp import DrawingApplication
+from .ConnectionConfig import ConnectionConfig
+from .MySQLEngine import MySQLEngine
 
 class Login:
     def __init__(self,engine):

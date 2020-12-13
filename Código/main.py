@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from ConnectionConfig import ConnectionConfig
-from MySQLEngine import MySQLEngine
-from Login import Login
+from Core.ConnectionConfig import ConnectionConfig
+from Core.MySQLEngine import MySQLEngine
+from Core.Login import Login
 
 config = ConnectionConfig("localhost", "3306", "root", "root", "BaseA")
 engine = MySQLEngine(config)

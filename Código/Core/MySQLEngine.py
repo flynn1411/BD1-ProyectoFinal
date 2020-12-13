@@ -1,5 +1,4 @@
 import mysql.connector
-from datetime import date, datetime, timedelta
 class MySQLEngine:
 
     def __init__(self, config):

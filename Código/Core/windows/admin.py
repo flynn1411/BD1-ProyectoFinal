@@ -1,8 +1,8 @@
 import tkinter
 import re
 import tkinter.messagebox
-from windows.userInput import UserInput
-from windows.Draws import Draws
+from .userInput import UserInput
+from .Draws import Draws
 
 class Admin:
 
