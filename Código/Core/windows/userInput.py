@@ -55,7 +55,7 @@ class UserInput:
             tkinter.messagebox.showinfo(message="El usuario ya existe", title="Sign in error") 
     
     def updateUser(self):
-
+        sameName = False
         userAcc = self.userE.get()
         passwordAcc =  self.passE.get()
         usersList = self.engine.getOperatorUser()
@@ -63,10 +63,11 @@ class UserInput:
         for userID, username in usersList:
             if username == self.oldUsername:
                 oldID = userID
+                sameName = True
                 break
 
         exist = self.engine.updateOperatorUser(oldID,userAcc,passwordAcc)
-        if not exist:
+        if(sameName or not exist):
             self.updateWindow()
             self.userInput.destroy()
         else:
