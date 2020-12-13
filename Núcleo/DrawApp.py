@@ -235,7 +235,6 @@ class DrawingApplication(tkinter.Frame):
         #Actualizar la pantalla de dibujo
         def updateDrawScreen(drawID, name):            
             drawJson = self.engine.getDrawByID(drawID)
-            print(drawJson)
             self.currentDraw = {
                 "id" : drawID,
                 "name" : name,
@@ -337,11 +336,7 @@ class DrawingApplication(tkinter.Frame):
             resultRadius = re.match(patterNumberSize,radiusEntry.get())
             resultWidth = re.match(patterNumberSize,widthEntry.get())
 
-            print(resultRadius,"Radio")
-            print(resultWidth,"Width")
-
             if resultPenColor and resultFillColor and resultRadius and resultWidth:
-                print("in")
                 self.engine.updateUserConfigByUser([self.user["userId"],penEntry.get(),fillEntry.get(),radiusEntry.get(),widthEntry.get()])
             else:
                 print("Valores de la configuracion incompletos")
@@ -523,7 +518,6 @@ class DrawingApplication(tkinter.Frame):
 def main():
     root = tkinter.Tk()  
     drawingApp = DrawingApplication(root)  
-
     drawingApp.mainloop()
-    print("Program Execution Completed.")
+
 

@@ -3,7 +3,6 @@ import re
 import tkinter.messagebox
 from windows.userInput import UserInput
 
-
 class Admin:
 
     def __init__(self, engine):
@@ -50,7 +49,6 @@ class Admin:
         self.currentUserLabel = tkinter.Label(self.userMgmt, text = "", font=('arial', 12))
         self.currentUserLabel.place(x=190,y=370)
         
-        
         #User admin butons
         self.buttonUpdate = tkinter.Button(self.userMgmt, text="Update", font=('arial', 12), cursor='hand2', command=self.updateUser)
         self.buttonUpdate.place(x=50,y=400, width=80)
@@ -58,7 +56,6 @@ class Admin:
         self.buttonDelete = tkinter.Button(self.userMgmt, text="Delete", font=('arial', 12), cursor='hand2',command=self.deleteUser)
         self.buttonDelete.place(x=150,y=400, width=80)
         
-
         #Label de la configuración del usuario
         self.userConfigLabel = tkinter.Label(self.userMgmt, text = "User Config", font=('arial', 18, 'bold'))
         self.userConfigLabel.place(x=50,y=455)
@@ -87,7 +84,6 @@ class Admin:
         self.widthEntry = tkinter.Entry(self.userMgmt, font=('arial',13))
         self.widthEntry.place(x=200,y=605, height=28 )
 
-
         #save config
         self.saveConfigButton = tkinter.Button(self.userMgmt, text="Save Config", font=('arial', 12), cursor='hand2',command=self.saveConfig)
         self.saveConfigButton.place(x=185,y=650, width=120)
@@ -95,6 +91,7 @@ class Admin:
         self.userMgmt.mainloop() 
 
     def onselect(self,e):
+
         w = e.widget
         index = w.curselection()
         self.username = w.get(index)
@@ -110,23 +107,15 @@ class Admin:
        
         configList = self.engine.getUserConfig(userID)
 
-        penColorDB = configList[1]
-        fillColorDB = configList[2]
-        radiusDB = configList[4]
-        widthDB = configList[3]
-
-        self.penColorEntry.insert(0,penColorDB)
-        self.fillColorEntry.insert(0,fillColorDB)
-        self.radiusEntry.insert(0,radiusDB)
-        self.widthEntry.insert(0,widthDB)
-
-
+        self.penColorEntry.insert(0,configList[1])
+        self.fillColorEntry.insert(0,configList[2])
+        self.widthEntry.insert(0,configList[3])
+        self.radiusEntry.insert(0,configList[4])
 
     def addUser(self):
-        username = ""
-        mode = "signUp"
-        UserInput(self.engine, username, self.updateOperatorUser, mode)
 
+        mode = "signUp"
+        UserInput(self.engine, "", self.updateOperatorUser, mode)
 
     def updateUser(self):
         mode = "update"
@@ -149,7 +138,6 @@ class Admin:
         resultWidth = re.match(patterNumberSize,self.widthEntry.get())
 
         if resultPenColor and resultFillColor and resultRadius and resultWidth:
-            print("Valores completos ")
             self.engine.updateUserConfigByAdmin([userID,self.penColorEntry.get(),self.fillColorEntry.get(),self.radiusEntry.get(),self.widthEntry.get()])
         else:
               tkinter.messagebox.showinfo(message="Configuracion incompleta o incorrecta", title="Config error") 
