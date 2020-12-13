@@ -47,7 +47,7 @@ class Admin:
 
         #Label del nombre del actual usuario seleccionado
         self.currentUserLabel = tkinter.Label(self.userMgmt, text = "", font=('arial', 12))
-        self.currentUserLabel.place(x=190,y=370)
+        self.currentUserLabel.place(x=170,y=370)
         
         #User admin butons
         self.buttonUpdate = tkinter.Button(self.userMgmt, text="Update", font=('arial', 12), cursor='hand2', command=self.updateUser)
@@ -55,6 +55,9 @@ class Admin:
         
         self.buttonDelete = tkinter.Button(self.userMgmt, text="Delete", font=('arial', 12), cursor='hand2',command=self.deleteUser)
         self.buttonDelete.place(x=150,y=400, width=80)
+
+        self.buttonDraws = tkinter.Button(self.userMgmt, text="Draws", font=('arial', 12), cursor='hand2',command=self.drawsMgmt)
+        self.buttonDraws.place(x=250,y=400, width=80)
         
         #Label de la configuración del usuario
         self.userConfigLabel = tkinter.Label(self.userMgmt, text = "User Config", font=('arial', 18, 'bold'))
@@ -89,6 +92,9 @@ class Admin:
         self.saveConfigButton.place(x=185,y=650, width=120)
 
         self.userMgmt.mainloop() 
+    
+    def drawsMgmt(self):
+        pass
 
     def onselect(self,e):
 

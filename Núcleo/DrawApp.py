@@ -216,17 +216,6 @@ class DrawingApplication(tkinter.Frame):
             else:
                 SaveFile(self.user["userId"], drawJson, newDrawSave)
 
-        def newDrawSave(nameDraw, userID, drawJson):
-            drawID = self.engine.insertDraw( nameDraw, userID, drawJson)
-            self.currentDraw = {
-                "id" : drawID,
-                "name" : nameDraw,
-                "file" : drawJson
-            }
-            updateTitle()
-
-        fileMenu.add_command(label="Save",command=saveFileButton)
-
         #Abrir los dibujos
         def loadFileButton():
             result = self.engine.getDraws(self.user["userId"])
@@ -256,9 +245,23 @@ class DrawingApplication(tkinter.Frame):
             # This line is necessary to update the window after the picture is drawn.
             screen.update()
             
-
-            
         fileMenu.add_command(label="Load",command=loadFileButton)
+
+        def newDrawSave(nameDraw, userID, drawJson):
+            drawID = self.engine.insertDraw( nameDraw, userID, drawJson)
+            self.currentDraw = {
+                "id" : drawID,
+                "name" : nameDraw,
+                "file" : drawJson
+            }
+            updateTitle()
+
+        fileMenu.add_command(label="Save",command=saveFileButton)
+
+        def saveAsFileButton():
+            pass
+
+        fileMenu.add_command(label="Save as",command=saveAsFileButton)
         
         #Ventana de administrador 
         if self.adminState:
@@ -266,7 +269,7 @@ class DrawingApplication(tkinter.Frame):
             def adminMgmt():
                 Admin(self.engine)
 
-            fileMenu.add_command(label="Soy admin",command=adminMgmt)
+            fileMenu.add_command(label="Configure",command=adminMgmt)
 
         # The write function writes an Json file to the given filename
         def createJson():
