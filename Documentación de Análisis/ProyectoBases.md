@@ -13,7 +13,7 @@
 
 - Crear una configuracion por defecto cada vez que se cree un usuario, **usar Triggers** []
 
-- cuando inicie sesión un usuario se debe asignar la ultima configuracion declarada por el usuario. **Usar un procedimiento almacenado** []
+- cuando inicie sesión un usuario se debe asignar la ultima configuracion declarada por el usuario. **Usar un procedimiento almacenado** [x]
 
 
 ## Drawing App
@@ -26,7 +26,7 @@
 
 - Crear un boton Save-as para guardar nuevos dibujos sin importar si se ha cargado uno previamente. []
 
-- Cada vez que se cambie la configuracion se debera alterar tal informacion a la base de datos. []
+- Cada vez que se cambie la configuracion se debera alterar tal informacion a la base de datos. [x]
 
 - crear boton delete draw
 
@@ -40,7 +40,7 @@
 
 - Alterar la configuracion del usuario cuando se oprima el boton guardar [x]
 
-- *(opcional)*  Se puede hacer uso de Regex para hacer validaciones para los datos de configuraciones agregados. []
+- *(opcional)*  Se puede hacer uso de Regex para hacer validaciones para los datos de configuraciones agregados. [x]
 
 - Interfaz para ver los dibujos de un/todos usuario y eliminarlos []
 
@@ -59,7 +59,7 @@
 
 - Se debe agregar foreign constraint de tal manera que cuando se elimine un usuario tambien se eliminen todos los dibujos, esto se hara mediante la regla **"CASCADE"**
 
-- La creación de registro mediante triggers [...]
+- La creación de registro mediante triggers [x]
 
 - Aplicar Case-Sensitive [X]
 
