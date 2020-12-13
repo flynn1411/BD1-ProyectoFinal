@@ -26,8 +26,8 @@ CREATE TABLE Role(
 
 /*Insertamos los roles correspondientes en la tabla (Role)*/
 INSERT INTO Role ( txt_roleName ) VALUES
-    ("ADMIN"),
-    ("OPERADOR")
+    ( "ADMIN" ),
+    ( "OPERADOR" )
 ;
 
 /*Creamos la tabla (Account) es donde guardaremos la información de cada usuario, como su nombre y 

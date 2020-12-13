@@ -16,7 +16,7 @@ delimiter //
 CREATE PROCEDURE Auth_SP (IN username TEXT,IN accPassword TEXT, OUT userID INT)
        BEGIN
          SELECT Account.id INTO userID FROM Account
-         WHERE (BINARY Account.txt_name = username) AND ( BINARY Account.txt_password = accPassword);
+         WHERE (BINARY Account.txt_name = HEX(AES_ENCRYPT(username, 'root')) ) AND ( BINARY Account.txt_password = HEX(AES_ENCRYPT(accPassword, 'root')) );
 
          IF userID IS NOT NULL THEN
             INSERT INTO LogBook(accountId, actionId, elementId, txt_elementName, tim_recordDate) VALUES(
@@ -40,8 +40,8 @@ delimiter //
 
 CREATE PROCEDURE GetRole_SP (IN username TEXT,IN accPassword TEXT, OUT typeAcc CHAR(8))
        BEGIN
-         SELECT Role.txt_roleName INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
-         WHERE (BINARY Account.txt_name = username) AND (BINARY Account.txt_password = accPassword) ;
+         SELECT AES_DECRYPT(UNHEX(Role.txt_roleName), 'root') INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
+         WHERE (BINARY Account.txt_name = HEX(AES_ENCRYPT(username, 'root'))) AND (BINARY Account.txt_password = HEX(AES_ENCRYPT(accPassword, 'root'))) ;
        END//
 
 CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
@@ -55,13 +55,13 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
 
 
           SELECT Drawing.accountId INTO accountID FROM Drawing WHERE id=drawingID;
-          SELECT Drawing.txt_fileName INTO drawingName FROM Drawing WHERE id=drawingID;
+          SELECT AES_DECRYPT(UNHEX(Drawing.txt_fileName), 'root') INTO drawingName FROM Drawing WHERE id=drawingID;
 
           INSERT INTO LogBook(accountId, actionId, elementId, txt_elementName, tim_recordDate) VALUES(
                   accountID,
                   1,
                   1,
-                  drawingName,
+                  AES_DECRYPT(UNHEX(drawingName), 'root'),
                   NOW()
                 );
           COMMIT;
@@ -83,7 +83,7 @@ CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileCon
             fileContents
           );
 
-          SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.accountId = userID);
+          SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = HEX(AES_ENCRYPT(drawingName, 'root'))) AND (Drawing.accountId = userID);
           COMMIT;
         ELSE
           SELECT NULL INTO exist;
@@ -109,7 +109,7 @@ CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
 
 CREATE PROCEDURE AddAccount_SP (IN username TEXT, IN accPassword TEXT, OUT valid INT)
       BEGIN
-        SELECT Account.id INTO valid FROM Account WHERE (Account.txt_name = username);
+        SELECT Account.id INTO valid FROM Account WHERE (Account.txt_name = HEX(AES_ENCRYPT(username, 'root')) );
 
         IF valid IS NULL THEN
           INSERT INTO Account(txt_name, txt_password) 
@@ -126,7 +126,7 @@ CREATE PROCEDURE AddAccount_SP (IN username TEXT, IN accPassword TEXT, OUT valid
 CREATE PROCEDURE UpdateAccount_SP (IN affectedUser INT, IN username TEXT, IN accPassword TEXT, OUT exist INT)
   BEGIN
 
-    SELECT Account.id INTO exist FROM Account WHERE (Account.txt_name = username);
+    SELECT Account.id INTO exist FROM Account WHERE (Account.txt_name = HEX(AES_ENCRYPT(username, 'root')) );
 
         IF exist IS NULL THEN
           UPDATE Account SET
@@ -154,7 +154,7 @@ CREATE PROCEDURE DeleteAccountByID_SP (IN accountID INT)
         END IF;    
       END//
 
-CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor CHAR(7), IN fillcolor CHAR(7), IN radius INT, IN width INT)
+CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor TEXT, IN fillcolor TEXT, IN radius TEXT, IN width TEXT)
   BEGIN
     DECLARE userName TEXT;
 
@@ -172,14 +172,14 @@ CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor CHAR
       1,
       2,
       2,
-      CONCAT(userName, '_configFile'),
+      CONCAT(AES_DECRYPT(UNHEX(username), 'root'), '_configFile'),
       NOW()
     );
     COMMIT;
   END//
 
 
-CREATE PROCEDURE UpdateConfigByUser_SP (IN affectedUserID INT, IN pencolor CHAR(7), IN fillcolor CHAR(7), IN radius INT, IN width INT)
+CREATE PROCEDURE UpdateConfigByUser_SP (IN affectedUserID INT, IN pencolor TEXT, IN fillcolor TEXT, IN radius TEXT, IN width TEXT)
   BEGIN
     UPDATE Config SET
       txt_penColor = pencolor,
@@ -197,6 +197,26 @@ CREATE PROCEDURE UpdateConfigByUser_SP (IN affectedUserID INT, IN pencolor CHAR(
     );
     COMMIT;
   END//
+
+/*CREATE PROCEDURE GetConfigByAccountID(
+                  IN accountId INT,
+                  OUT userID INT,
+                  OUT configID INT,
+                  OUT pencolor TEXT,
+                  OUT fillcolor TEXT,
+                  OUT radius TEXT,
+                  OUT width TEXT
+                  )
+  BEGIN
+
+    SELECT id,
+    txt_penColor,
+    txt_fillColor,
+    int_width,
+    int_radius,
+    accountId,
+
+  END $$*/
 
 delimiter ; 
 /*

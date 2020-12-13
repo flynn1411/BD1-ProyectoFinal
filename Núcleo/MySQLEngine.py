@@ -83,7 +83,7 @@ class MySQLEngine:
         return (userID, admin)
 
     def getUserConfig(self,userID):
-        return self.select("SELECT * FROM Config WHERE accountId=%s" % userID)[0]
+        return self.select("SELECT Config.id,AES_DECRYPT(UNHEX(Config.txt_penColor), 'root'), AES_DECRYPT(UNHEX(Config.txt_fillColor), 'root'), AES_DECRYPT(UNHEX(Config.int_width), 'root'), AES_DECRYPT(UNHEX(Config.int_radius), 'root'), AES_DECRYPT(UNHEX(Config.accountId), 'root') FROM Config WHERE accountId=%s" % userID)[0]
 
     def updateUserConfigByAdmin(self, configValues):
         self.generalCallProcedure('UpdateConfigByAdmin_SP', configValues)

@@ -33,8 +33,8 @@ CREATE TABLE Role(
 
 /*Insertamos los roles correspondientes en la tabla (Role)*/
 INSERT INTO Role ( txt_roleName ) VALUES
-    ("ADMIN"),
-    ("OPERADOR")
+    ( "ADMIN" ),
+    ( "OPERADOR" )
 ;
 
 /*Creamos la tabla (Account) es donde guardaremos la información de cada usuario, como su nombre y 
@@ -53,10 +53,10 @@ definido una llave foranea que hace referencia a la tabla (Account) para poder i
 cada usuario, para así guardar su configuracion correspondiente, */
 CREATE TABLE Config(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    txt_penColor CHAR(7) DEFAULT "#000000",
-    txt_fillColor CHAR(7) DEFAULT "#000000",
-    int_width INT,
-    int_radius INT,
+    txt_penColor TEXT DEFAULT "#000000",
+    txt_fillColor TEXT DEFAULT "#000000",
+    int_width TEXT,
+    int_radius TEXT,
     accountId INT NOT NULL,
     CONSTRAINT fk_accountId FOREIGN KEY (accountId) REFERENCES Account(id) ON DELETE CASCADE
 )COMMENT = "Se llena cuando el usario modifica valores en la interfaz gráfica, estos se guardan en dicha tabla";

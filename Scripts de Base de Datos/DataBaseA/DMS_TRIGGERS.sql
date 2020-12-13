@@ -3,6 +3,7 @@ USE BaseA;
 DROP TRIGGER IF EXISTS drawingCreated_trigger;
 DROP TRIGGER IF EXISTS drawingModified_trigger;
 DROP TRIGGER IF EXISTS drawingDeleted_trigger;
+DROP TRIGGER IF EXISTS encryptAccount_trigger;
 DROP TRIGGER IF EXISTS accountCreated_trigger;
 DROP TRIGGER IF EXISTS accountModified_trigger;
 DROP TRIGGER IF EXISTS accountDeleted_trigger;
@@ -22,7 +23,7 @@ CREATE TRIGGER drawingCreated_trigger
                     NEW.accountId,
                     5,
                     1,
-                    NEW.txt_fileName,
+                    AES_DECRYPT(UNHEX(NEW.txt_fileName), 'root'),
                     NOW()
                 );
         END$$
@@ -40,7 +41,7 @@ CREATE TRIGGER drawingModified_trigger
                 NEW.accountId,
                 2,
                 1,
-                NEW.txt_fileName,
+                AES_DECRYPT(UNHEX(NEW.txt_fileName), 'root'),
                 NOW()
             );
         END$$
@@ -53,13 +54,51 @@ CREATE TRIGGER drawingDeleted_trigger
                 1,
                 3,
                 1,
-                OLD.txt_fileName,
+                AES_DECRYPT(UNHEX(OLD.txt_fileName), 'root'),
                 NOW()
             );
         END$$
 
 /*delimiter ;*/
+CREATE TRIGGER encryptDrawing_trigger
+    BEFORE INSERT
+    ON Drawing FOR EACH ROW
+        BEGIN
+            SET NEW.txt_fileName = HEX(AES_ENCRYPT(NEW.txt_fileName, 'root'));
+        END$$
 
+CREATE TRIGGER encryptAccount_trigger
+    BEFORE INSERT
+    ON Account FOR EACH ROW
+        BEGIN
+            SET NEW.txt_name = HEX(AES_ENCRYPT(NEW.txt_name, 'root'));
+            SET NEW.txt_password = HEX(AES_ENCRYPT(NEW.txt_password, 'root'));
+        END$$
+
+CREATE TRIGGER encryptAccountUpdate_trigger
+    BEFORE UPDATE
+    ON Account FOR EACH ROW
+        BEGIN
+            SET NEW.txt_name = HEX(AES_ENCRYPT(NEW.txt_name, 'root'));
+            SET NEW.txt_password = HEX(AES_ENCRYPT(NEW.txt_password, 'root'));
+        END$$
+
+CREATE TRIGGER encryptDrawingUpdate_trigger
+    BEFORE UPDATE
+    ON Drawing FOR EACH ROW
+        BEGIN
+            SET NEW.txt_fileName = HEX(AES_ENCRYPT(NEW.txt_fileName, 'root'));
+        END$$
+
+CREATE TRIGGER encryptConfingUpdate_trigger
+    BEFORE UPDATE
+    ON Config FOR EACH ROW
+        BEGIN
+            SET NEW.txt_penColor = HEX(AES_ENCRYPT(NEW.txt_penColor, 'root'));
+            SET NEW.txt_fillColor = HEX(AES_ENCRYPT(NEW.txt_fillColor, 'root'));
+            SET NEW.int_width = HEX(AES_ENCRYPT(NEW.int_width, 'root'));
+            SET NEW.int_radius = HEX(AES_ENCRYPT(NEW.int_radius, 'root'));
+        END$$
 /*delimiter ;
 /*Este Trigger lo definimos para que después de que se inserte en Account, registre ciertos 
 atributos que hemos definido en la tabla LogBook(Bitácora) para así llevar un registro de algunas acciones del usuario*/
@@ -71,8 +110,8 @@ CREATE TRIGGER accountCreated_trigger
         BEGIN
             /*Se crea una archivo config para el usuario*/
             INSERT INTO Config (int_width, int_radius, accountId) VALUES(
-                1,
-                10,
+                HEX(AES_ENCRYPT("1", 'root')),
+                HEX(AES_ENCRYPT("10", 'root')),
                 NEW.id
                 );
                 
@@ -82,7 +121,7 @@ CREATE TRIGGER accountCreated_trigger
                     1,
                     5,
                     3,
-                    NEW.txt_name,
+                    AES_DECRYPT(UNHEX(NEW.txt_name), 'root'),
                     NOW()
                 );
             /*BASE B*/
@@ -104,7 +143,7 @@ CREATE TRIGGER accountModified_trigger
                 1,
                 2,
                 3,
-                NEW.txt_name,
+                AES_DECRYPT(UNHEX(NEW.txt_name), 'root'),
                 NOW()
             );
         END$$
@@ -117,7 +156,7 @@ CREATE TRIGGER accountDeleted_trigger
                 1,
                 3,
                 3,
-                OLD.txt_name,
+                AES_DECRYPT(UNHEX(OLD.txt_name), 'root'),
                 NOW()
             );
         END$$
