@@ -3,6 +3,7 @@ USE BaseA;
 DROP PROCEDURE IF EXISTS Auth_SP;
 DROP PROCEDURE IF EXISTS GetRole_SP;
 DROP PROCEDURE IF EXISTS GetDrawingByID_SP;
+DROP PROCEDURE IF EXISTS DeleteDrawingByID_SP;
 DROP PROCEDURE IF EXISTS AddAccount_SP;
 DROP PROCEDURE IF EXISTS UpdateAccount_SP;
 DROP PROCEDURE IF EXISTS UpdateConfigByAdmin_SP;
@@ -62,6 +63,21 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
                   NOW()
                 );
           COMMIT;
+
+        END IF;
+        
+      END//
+
+
+CREATE PROCEDURE DeleteDrawingByID_SP (IN drawingID INT)
+      BEGIN
+        DECLARE drawingExists INT;
+
+        SELECT Drawing.id INTO drawingExists FROM Drawing WHERE BINARY drawingID = Drawing.id;
+        
+        IF drawingExists IS NOT NULL THEN
+          DELETE FROM Drawing
+          WHERE Drawing.id = drawingID;
 
         END IF;
         

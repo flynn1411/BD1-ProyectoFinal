@@ -48,7 +48,7 @@ CREATE TRIGGER drawingDeleted_trigger
     ON Drawing FOR EACH ROW
         BEGIN
             INSERT INTO LogBook (accountId,actionId, elementId, txt_elementName, tim_recordDate) VALUES (
-                OLD.accountId,
+                1,
                 3,
                 1,
                 OLD.txt_fileName,

@@ -1,5 +1,5 @@
 
-## Martes 24 de Noviembre 
+## Martes 24 de Noviembre
 
 - (Ariel) Hoy se discutio por primera vez la definición del proyecto utilizando Discord como plataforma de reuniones.
 
@@ -28,11 +28,12 @@ el programa.
 
 - (Caleb y Josué) Completación del archivo DDS.sql para la base de datos A asi como su diagrama ER.
 
-## Sabado 5 de Diciembre 
+## Sabado 5 de Diciembre
 
 - (Gabriel y Fernando): Se crearon las ventanas para la carga y guardado de dibujo. Se implementaron las interfaces creadas al proyecto. Tambien se alteraron métodos de la aplicación del dibujo, estos cambios abarcan la manera en como el programa guardaba los archivos json, el programa original guardaba los archivos json en el directorio seleccionado por el usuario. Debido a esto se necesito alterar el proceso de guardado y carga de tal manera que todo los archivos guardados se encuentren en la base de datos. Para cargar un dibujo ahora es necesario hacer transacciones tomando en cuenta el usuario actual. 
 
-## Domingo 6 de Diciembre 
+## Domingo 6 de Diciembre
+
 - (Gabriel): Se creó la ventana para la administración de usuarios el cual solamente sera accedido por el usuario con privilegios de Administrador. Se agregó una vista a la base de datos para la visualizacion de los usuarios operadores, esta ha sido implementada en la ventana del administrador. En el mySQLEngine se creó un método general para el insertado de datos y tambien se agregaron los metodos necesarios para la visualizacion de los usuarios operadores seleccionando la vista creada previamente.
 
 ## Lunes 7 de Diciembre
@@ -48,10 +49,11 @@ el programa.
 - (Caleb y Josué): Se crearón más Triggers para los otros eventos existentes mencionados en la definición del proyecto. Asi como la documentación del los scripts SQL.
 
 ## Miercoles 9 de Diciembre
+
 - (Gabriel): Se cambiaron algunas consultas basicas dentro del motor de mysql por procedimientos almacenados escritos en la parte de la base de datos.
 
 - (Caleb y Josué): Se agregó el campo "txt_elementName" en la bitacora de la base A, esto con la intención de obtener una tabla de registros más detallada. Asímismo se logró hacer una comparación de contraseña más exacta (tomando en cuenta las mayusculas y minusculas).
 
-## Viernes 11 de Diciembre 
+## Viernes 11 de Diciembre
 
 - (Gabriel y Fernando) Se organizaron algunas funciones de la ventana de admin al igual que se agregaron la funcionalidad completa de agregar usuarios y poder modificarlos cambiando su nombre y contraseña, se implemento correctamente la verificación en las tablas para verificar si al agregar un usuario el usuario ya existe en la base de datos y de igual forma para la modificacion de un usuario no puede agregar el mismo nombre de un usuario ya existente. Se agrego el reconocimiento de la configuración de el lapiz su color el radio y lo ancho de lapiz y desde el modo usuario se puede modificarlos y que se guarden los valores en la base de datos.
