@@ -1,18 +1,23 @@
 USE BaseA;
 
+/*Eliminamos los triggers en caso de que existan y así sucesivamente para cada triggers*/
 DROP TRIGGER IF EXISTS drawingCreated_trigger;
 DROP TRIGGER IF EXISTS drawingModified_trigger;
 DROP TRIGGER IF EXISTS drawingDeleted_trigger;
+DROP TRIGGER IF EXISTS encryptDrawing_trigger;
 DROP TRIGGER IF EXISTS encryptAccount_trigger;
+DROP TRIGGER IF EXISTS encryptAccountUpdate_trigger;
+DROP TRIGGER IF EXISTS encryptDrawingUpdate_trigger;
+DROP TRIGGER IF EXISTS encryptConfingUpdate_trigger;
 DROP TRIGGER IF EXISTS accountCreated_trigger;
 DROP TRIGGER IF EXISTS accountModified_trigger;
 DROP TRIGGER IF EXISTS accountDeleted_trigger;
 
 
+delimiter $$
 /*Creamos este Trigger para que después que se inserte en la tabla Drawing, registrar cuando un usuario crea 
 un dibujo nuevo, de esa forma poder insertar en la tabla LogBook(Bitácora) el id del usuario que creo el dibujo 
 así poder identificarlo y además asignándole la fecha y hora actual de creación. */
-delimiter $$
 
 CREATE TRIGGER drawingCreated_trigger 
     AFTER INSERT 
@@ -46,6 +51,7 @@ CREATE TRIGGER drawingModified_trigger
             );
         END$$
 
+/*Creamos este trigger para poder registrar en la bítacora cuando se elimina un dibujo*/
 CREATE TRIGGER drawingDeleted_trigger
     BEFORE DELETE
     ON Drawing FOR EACH ROW
@@ -61,7 +67,6 @@ CREATE TRIGGER drawingDeleted_trigger
             DELETE * FROM BaseB.Drawing WHERE BaseB.Drawing.id = OLD.id;
         END$$
 
-/*delimiter ;*/
 CREATE TRIGGER encryptDrawing_trigger
     BEFORE INSERT
     ON Drawing FOR EACH ROW

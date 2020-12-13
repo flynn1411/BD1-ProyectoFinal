@@ -1,5 +1,6 @@
 USE BaseA;
 
+/* Eliminamos los procedimiento en caso de que existan y así sucesivamente para cada procedimiento definido*/
 DROP PROCEDURE IF EXISTS Auth_SP;
 DROP PROCEDURE IF EXISTS GetRole_SP;
 DROP PROCEDURE IF EXISTS CreateDrawing_SP;
@@ -14,6 +15,7 @@ DROP PROCEDURE IF EXISTS UpdateConfigByUser_SP;
 
 delimiter //
 
+/*Este procedimento auténtica y registra en bítacora utilizando un binary para que haga match con la cadena(password, account) incluyendo mayúsculas y minuscalas*/
 CREATE PROCEDURE Auth_SP (IN username TEXT,IN accPassword TEXT, OUT userID INT)
        BEGIN
          SELECT Account.id INTO userID FROM Account
@@ -38,13 +40,14 @@ delimiter ;
 delimiter //
 
 /*DROP PROCEDURE GetRole;*/
-
+/*Este procedimiento lo creamos para obtener el role de usario, recibe el y username y password, así obtenemos el role*/
 CREATE PROCEDURE GetRole_SP (IN username TEXT,IN accPassword TEXT, OUT typeAcc TEXT)
        BEGIN
          SELECT AES_DECRYPT(UNHEX(Role.txt_roleName), 'root') INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
          WHERE (BINARY Account.txt_name = HEX(AES_ENCRYPT(username, 'root'))) AND (BINARY Account.txt_password = HEX(AES_ENCRYPT(accPassword, 'root'))) ;
        END//
 
+/*Creamos este procedimiento con el fin de obtener un dibujo esto lo hacemos mediante el id y sólo si existe, esto se registrará en la bítacora*/
 CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
       BEGIN
         DECLARE drawingName TEXT;
@@ -71,7 +74,7 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
         
       END//
 
-
+/*Creamos este procedimento con el fin de crear un dibujo nuevo en la base de datos,el usuario que lo realiza es identificado mediante id, esta creción es registrada en la bítacora*/
 CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, IN blobContents BLOB, OUT exist INT)
       BEGIN
         SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.accountId = userID);
@@ -127,6 +130,7 @@ CREATE PROCEDURE UpdateDrawingByID_SP(IN drawingID, IN jsonFile JSON, IN blobFil
           SELECT NULL INTO exist;
       END$$
 
+/*Creamos este procedimiento para poder borrar el dibujo sí este existe en la base de datos.*/
 CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
       BEGIN
         DECLARE drawingExists INT;
@@ -141,7 +145,7 @@ CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
         
       END//
 
-
+/*Creamos esté procedimento para poder agregar un usuario nuevo, recibiendo el userName y la password. */
 CREATE PROCEDURE AddAccount_SP (IN username TEXT, IN accPassword TEXT, OUT valid INT)
       BEGIN
         SELECT Account.id INTO valid FROM Account WHERE (Account.txt_name = HEX(AES_ENCRYPT(username, 'root')) );
@@ -158,6 +162,7 @@ CREATE PROCEDURE AddAccount_SP (IN username TEXT, IN accPassword TEXT, OUT valid
 
       END//
 
+/*Creamos este procedimento para poder actualizar los datos del usuario previamente registrado en la base de datos*/
 CREATE PROCEDURE UpdateAccount_SP (IN affectedUser INT, IN username TEXT, IN accPassword TEXT, OUT exist INT)
   BEGIN
 
@@ -175,6 +180,7 @@ CREATE PROCEDURE UpdateAccount_SP (IN affectedUser INT, IN username TEXT, IN acc
     COMMIT;
   END//
 
+/*Creamos este procedimento con el fin de borrar un usuario existente en la base de datos*/
 CREATE PROCEDURE DeleteAccountByID_SP (IN accountID INT)
       BEGIN
         DECLARE accountExists INT;
@@ -189,6 +195,7 @@ CREATE PROCEDURE DeleteAccountByID_SP (IN accountID INT)
         END IF;    
       END//
 
+/*Creamos este procedimento con el fin de actualizar la configuración(penColor, fillColor, radius, width), cabe mencionar que esta configuración sólo puede ser actualizar por el admin, además estos cambios serán registrados en la bítacora*/
 CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor TEXT, IN fillcolor TEXT, IN radius TEXT, IN width TEXT)
   BEGIN
     DECLARE userName TEXT;
@@ -213,7 +220,7 @@ CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor TEXT
     COMMIT;
   END//
 
-
+/*Creamos este procedimiento con el fin de que el usuario pueda actualizar su información de configuración, estos cambios son registrados en la bítacora*/
 CREATE PROCEDURE UpdateConfigByUser_SP (IN affectedUserID INT, IN pencolor TEXT, IN fillcolor TEXT, IN radius TEXT, IN width TEXT)
   BEGIN
     UPDATE Config SET
