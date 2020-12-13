@@ -9,7 +9,7 @@
 
 - Pasar todas las ventanas al folder de "windows" []
 
-##Inicio de sesion
+## Inicio de sesion
 
 - Crear una configuracion por defecto cada vez que se cree un usuario, **usar Triggers** []
 
