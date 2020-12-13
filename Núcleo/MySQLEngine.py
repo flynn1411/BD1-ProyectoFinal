@@ -59,13 +59,8 @@ class MySQLEngine:
         return result_args[-1]
 
     def insertDraw(self, name, userId, drawJson):
-        date = datetime.now()
-        drawID =  self.insert(
-            'Drawing',  
-            ["txt_fileName", "tim_date", "accountId", "jso_file"], 
-            (name, date, userId, drawJson)
-        )
-        return drawID
+        result = self.generalCallProcedure("CreateDrawing_SP", [name, userId, drawJson, "@drawID"])
+        return result
 
     def getDraws(self, userId):
         result = self.select("SELECT Drawing.id, Drawing.txt_fileName FROM Drawing JOIN Account ON Drawing.accountId=Account.id WHERE Account.id=%s" % userId)
@@ -104,3 +99,6 @@ class MySQLEngine:
     
     def deleteDrawByID(self, drawID):
         self.generalCallProcedure('DeleteDrawingByID_SP', [drawID])
+
+    def deleteUserByID(self, userID):
+        self.generalCallProcedure('DeleteAccountByID_SP',[userID])

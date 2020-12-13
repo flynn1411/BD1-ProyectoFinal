@@ -86,20 +86,20 @@ CREATE TRIGGER accountCreated_trigger
                     NOW()
                 );
             /*BASE B*/
-             /*Se crea una archivo config para el usuario*/
+             /*Se crea una archivo config para el usuario
             INSERT INTO BaseB.Config (int_width, int_radius, accountId) VALUES(
                 1,
                 10,
                 NEW.id
-                );
+                );*/
                 
-            /*Se registra que el usuario se creó por parte del único administrador*/
+            /*Se registra que el usuario se creó por parte del único administrador
             INSERT INTO BaseB.Account (txt_name, txt_password, id_role) VALUES
                 (
                     NEW.txt_name,
                     NEW.txt_password,
                     NEW.id_role
-                );
+                );*/
         END$$
 
 CREATE TRIGGER accountModified_trigger

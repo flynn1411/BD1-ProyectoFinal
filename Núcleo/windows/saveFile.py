@@ -25,7 +25,10 @@ class SaveFile:
     def saveDraw(self):
         name = self.filename.get()
         if(name):
-            self.insertDraw(name, self.userID, self.drawJson)
-            self.save.destroy()
+            drawID = self.insertDraw(name, self.userID, self.drawJson)
+            if drawID:
+                self.save.destroy()
+            else:
+                tkinter.messagebox.showinfo(message="Nombre del archivo existente en su lista", title="save error")     
         else:
             tkinter.messagebox.showinfo(message="Add a file name", title="save error") 

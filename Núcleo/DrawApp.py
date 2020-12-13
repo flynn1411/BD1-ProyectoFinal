@@ -226,7 +226,7 @@ class DrawingApplication(tkinter.Frame):
         #Abrir los dibujos
         def loadFileButton():
             result = self.engine.getDraws(self.user["userId"])
-            LoadFile(self, result, updateDrawScreen)
+            LoadFile(self, result, updateDrawScreen,"load")
             
         #Actualizar la pantalla de dibujo
         def updateDrawScreen(drawID, name):            
@@ -255,28 +255,46 @@ class DrawingApplication(tkinter.Frame):
         fileMenu.add_command(label="Load",command=loadFileButton)
 
         def newDrawSave(nameDraw, userID, drawJson):
-            drawID = self.engine.insertDraw( nameDraw, userID, drawJson)
-            self.currentDraw = {
-                "id" : drawID,
-                "name" : nameDraw,
-                "file" : drawJson
-            }
-            updateTitle()
+            drawID = self.engine.insertDraw(nameDraw, userID, drawJson)
+            if(drawID != 0):                
+                self.currentDraw = {
+                    "id" : drawID,
+                    "name" : nameDraw,
+                    "file" : drawJson
+                }
+                updateTitle()
+                return drawID
+            else:
+                return False
+
 
         fileMenu.add_command(label="Save",command=saveFileButton)
 
         fileMenu.add_command(label="Save as",command=saveAsFileButton)
 
-        def downloadButton():
-            pass
+        def download(drawID):
+            drawJson = self.engine.getDrawByID(drawID)
+            filename = tkinter.filedialog.asksaveasfilename(title="Save Picture As...")
+            filename = "%s.json" % filename    
+            jsonConvert = json.loads(drawJson)
+            jsonStr = str(json.dumps(jsonConvert))
+            file = open(filename, "w")
+            file.write(jsonStr)
+            file.close() 
 
+
+        def downloadButton():
+            result = self.engine.getDraws(self.user["userId"])
+            LoadFile(self, result, download,"download") 
+
+           
         fileMenu.add_command(label="Download",command=downloadButton)
         
         #Ventana de administrador 
         if self.adminState:
 
             def adminMgmt():
-                Admin(self.engine)
+                Admin(self,self.engine)
 
             fileMenu.add_command(label="Configure",command=adminMgmt)
 

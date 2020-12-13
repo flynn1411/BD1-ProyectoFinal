@@ -1,17 +1,15 @@
 ## Controlador 
-- El programa debera contener la contraseña del administrador para la encriptacion. []
 
-- Cada dato que se envia a la base de datos debe ser encriptada previamente []
+- Módulo de compresion de archivos json baseB []
 
-- Cada dato que se recibe previamente debe ser desencriptada previamente []
+- Encriptacion de archivos json personalizado []
 
-- Queries para la conexion de la base de datos y el controlador (**Vistas, SP , Inserts, Selects, Deletes y Update**) [...]
+- Queries para la conexion de la base de datos y el controlador (**Vistas, SP , Inserts, Selects, Deletes y Update**) [x]
 
-- Pasar todas las ventanas al folder de "windows" []
 
 ## Inicio de sesion
 
-- Crear una configuracion por defecto cada vez que se cree un usuario, **usar Triggers** []
+- Crear una configuracion por defecto cada vez que se cree un usuario, **usar Triggers** [x]
 
 - cuando inicie sesión un usuario se debe asignar la ultima configuracion declarada por el usuario. **Usar un procedimiento almacenado** [x]
 
@@ -24,25 +22,23 @@
 
 - Cada vez que se guarde un dibujo que se ha cargado previamente se sobrescribira en la base de datos. [x]
 
-- Crear un boton Save-as para guardar nuevos dibujos sin importar si se ha cargado uno previamente. []
+- Crear un boton Save-as para guardar nuevos dibujos sin importar si se ha cargado uno previamente. [x]
 
 - Cada vez que se cambie la configuracion se debera alterar tal informacion a la base de datos. [x]
 
-- crear boton delete draw
-
-
+- Crear opcion de descarga en el menu file [x]
 
 ## Admin
 
 - Cada vez que el admin seleccione un usuario se deberan mostrar en pantalla sus configuraciones correspondientes [x]
 
-- Agregar funcionalidad a los botones de Agregar, modificar y borrar usuario [...]
+- Agregar funcionalidad a los botones de Agregar, modificar y borrar usuario [x]
 
 - Alterar la configuracion del usuario cuando se oprima el boton guardar [x]
 
 - *(opcional)*  Se puede hacer uso de Regex para hacer validaciones para los datos de configuraciones agregados. [x]
 
-- Interfaz para ver los dibujos de un/todos usuario y eliminarlos []
+- Interfaz para ver los dibujos de un/todos usuario y eliminarlos [x]
 
 ## Cargar dibujo
 
@@ -57,13 +53,13 @@
 ## Base de datos
 
 
-- Se debe agregar foreign constraint de tal manera que cuando se elimine un usuario tambien se eliminen todos los dibujos, esto se hara mediante la regla **"CASCADE"**
+- Se debe agregar foreign constraint de tal manera que cuando se elimine un usuario tambien se eliminen todos los dibujos, esto se hara mediante la regla **"CASCADE"** [X]
 
 - La creación de registro mediante triggers [x]
 
 - Aplicar Case-Sensitive [X]
 
-- *(opcional)* Se puede agregar una columna de fecha de creacion para la tabla de Usuarios. 
+- Crear Triggers para poblar la base de datos B []
 
-- *(opcional)* Se puede agregar una columna de fecha de modificacion para la tabla de Configuración.
+- Encriptación  en base de datos []
 

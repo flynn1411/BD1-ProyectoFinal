@@ -56,5 +56,6 @@ class Login:
         #self.login.withdraw()
         self.login.destroy()
         root = tkinter.Tk()  
+        root.resizable(0,0)
         drawingApp = DrawingApplication(root, self.adminState, user, self.engine)  
         drawingApp.mainloop()

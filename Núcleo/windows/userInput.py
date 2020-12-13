@@ -3,10 +3,10 @@ import tkinter.colorchooser
 import tkinter.filedialog
 
 class UserInput:
-    def __init__(self,engine, username, updateWindow,windowType = None):
+    def __init__(self,master,engine, username, updateWindow,windowType = None):
         self.updateWindow = updateWindow
         self.engine = engine
-        self.userInput = tkinter.Tk()
+        self.userInput = tkinter.Toplevel(master)
         self.userInput.geometry("400x200")
         self.userInput.configure(background = 'white')
         self.userInput.resizable(0,0)
@@ -40,7 +40,6 @@ class UserInput:
             self.loginButton = tkinter.Button(self.userInput,text="UPGRADE",cursor='hand2',command=self.updateUser)
 
         self.loginButton.place(x=150,y=150)
-        self.userInput.mainloop()
 
     def newUser(self):
 

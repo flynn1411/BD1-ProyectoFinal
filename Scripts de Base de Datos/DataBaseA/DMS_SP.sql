@@ -71,26 +71,28 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
       END//
 
 
-CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, OUT drawingID INT)
-      
-      SELECT Drawing.id INTO drawingID FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.userID = userID);
+CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, OUT exist INT)
+      BEGIN
+        SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.accountId = userID);
 
-      IF drawingID IS NULL THEN
-        INSERT INTO Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
-          drawingName,
-          NOW(),
-          userID,
-          fileContents,
-        );
+        IF exist IS NULL THEN
+          INSERT INTO Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
+            drawingName,
+            NOW(),
+            userID,
+            fileContents
+          );
 
-        SELECT Drawing.id INTO drawingID FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.userID = userID);
-        COMMIT;
+          SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.accountId = userID);
+          COMMIT;
+        ELSE
+          SELECT NULL INTO exist;
 
-      END IF;
+        END IF;
 
       END//
 
-CREATE PROCEDURE DeleteDrawingByID_SP (IN drawingID INT)
+CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
       BEGIN
         DECLARE drawingExists INT;
 
@@ -148,8 +150,8 @@ CREATE PROCEDURE DeleteAccountByID_SP (IN accountID INT)
           DELETE FROM Account
           WHERE Account.id = accountId;
 
-        END IF;
-        
+          COMMIT;
+        END IF;    
       END//
 
 CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor CHAR(7), IN fillcolor CHAR(7), IN radius INT, IN width INT)

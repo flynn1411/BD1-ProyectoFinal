@@ -3,14 +3,22 @@ import tkinter.messagebox
 
 class LoadFile:
 
-    def __init__(self, master, drawList, updateDrawScreen):
-        self.update = updateDrawScreen
+    def __init__(self, master, drawList, loadFunc,mode):
+        self.loadFunc = loadFunc
         self.load = tkinter.Toplevel(master)
-        self.load.title("Upload drawings")
         self.load.geometry("500x470")
         self.load.resizable(0,0)
-        #self.load.config(background="#E6E6E6")
-        self.nameLabel = tkinter.Label(self.load, text = "Upload Drawings", font=('arial', 20))
+
+        if (mode == "load"):
+            self.load.title("Upload drawings")
+            self.nameLabel = tkinter.Label(self.load, text = "Upload Drawings", font=('arial', 20))
+            self.buttonLoad = tkinter.Button(self.load, text="Open", font=('arial', 12), cursor='hand2', command=self.loadDraw)
+        elif (mode == "download"):
+            self.load.title("Download drawing")
+            self.nameLabel = tkinter.Label(self.load, text = "Download Drawing", font=('arial', 20))
+            self.buttonLoad = tkinter.Button(self.load, text="Download", font=('arial', 12), cursor='hand2', command=self.downloadDraw)
+       
+
         self.nameLabel.place(x=50,y=20)
 
         self.list = tkinter.Listbox(self.load, font=('arial', 15))
@@ -31,7 +39,6 @@ class LoadFile:
             self.drawDict[drawName] = drawID
             self.list.insert('end', drawName)
 
-        self.buttonLoad = tkinter.Button(self.load, text="Open", font=('arial', 12), cursor='hand2', command=self.loadDraw)
         self.buttonLoad.place(x=50,y=420, width=80)
         
         self.list.bind('<<ListboxSelect>>', self.onselect)        
@@ -45,8 +52,13 @@ class LoadFile:
     def loadDraw(self):
         name = self.currentDrawLabel.cget('text')
         if(name):
-            self.update(self.drawDict[name], name)
+            self.loadFunc(self.drawDict[name], name)
             self.load.destroy()
-
         else:
             tkinter.messagebox.showinfo(message="select a file", title="save error") 
+
+    def downloadDraw(self):
+        name = self.currentDrawLabel.cget('text')
+        self.loadFunc(self.drawDict[name])
+        self.load.destroy()
+        

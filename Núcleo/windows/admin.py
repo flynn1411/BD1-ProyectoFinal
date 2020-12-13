@@ -6,11 +6,11 @@ from windows.Draws import Draws
 
 class Admin:
 
-    def __init__(self, engine):
+    def __init__(self,master,engine):
         self.engine = engine
 
         #Ventana principal
-        self.userMgmt = tkinter.Tk()
+        self.userMgmt = tkinter.Toplevel(master)
         self.userMgmt.title("Admin Managment")
         self.userMgmt.geometry("500x700")
         self.userMgmt.resizable(0,0)
@@ -91,8 +91,6 @@ class Admin:
         #save config
         self.saveConfigButton = tkinter.Button(self.userMgmt, text="Save Config", font=('arial', 12), cursor='hand2',command=self.saveConfig)
         self.saveConfigButton.place(x=185,y=650, width=120)
-
-        self.userMgmt.mainloop() 
     
     def drawsMgmt(self):
         userID = self.users[self.username]
@@ -121,16 +119,20 @@ class Admin:
         self.radiusEntry.insert(0,configList[4])
 
     def addUser(self):
-
         mode = "signUp"
-        UserInput(self.engine, "", self.updateOperatorUser, mode)
+        UserInput(self.userMgmt,self.engine, "", self.updateOperatorUser, mode)
+        
 
     def updateUser(self):
         mode = "update"
-        UserInput(self.engine, self.username, self.updateOperatorUser, mode)
+        self.currentUserLabel.configure(text="")
+        UserInput(self.userMgmt,self.engine, self.username, self.updateOperatorUser, mode)
        
     def deleteUser(self):
-        pass
+        userID = self.users[self.username]
+        self.engine.deleteUserByID(userID)
+        self.currentUserLabel.configure(text="")
+        self.updateOperatorUser()
    
     def saveConfig(self):
         
