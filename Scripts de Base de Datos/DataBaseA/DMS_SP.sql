@@ -3,6 +3,7 @@ USE BaseA;
 DROP PROCEDURE IF EXISTS Auth_SP;
 DROP PROCEDURE IF EXISTS GetRole_SP;
 DROP PROCEDURE IF EXISTS CreateDrawing_SP;
+DROP PROCEDURE IF EXISTS UpdateDrawingByID_SP;
 DROP PROCEDURE IF EXISTS GetDrawingByID_SP;
 DROP PROCEDURE IF EXISTS DeleteDrawingByID_SP;
 DROP PROCEDURE IF EXISTS AddAccount_SP;
@@ -38,9 +39,9 @@ delimiter //
 
 /*DROP PROCEDURE GetRole;*/
 
-CREATE PROCEDURE GetRole_SP (IN username TEXT,IN accPassword TEXT, OUT typeAcc CHAR(8))
+CREATE PROCEDURE GetRole_SP (IN username TEXT,IN accPassword TEXT, OUT typeAcc TEXT)
        BEGIN
-         SELECT Role.txt_roleName INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
+         SELECT AES_DECRYPT(UNHEX(Role.txt_roleName), 'root') INTO typeAcc FROM Account JOIN Role ON Account.id_role = Role.id
          WHERE (BINARY Account.txt_name = HEX(AES_ENCRYPT(username, 'root'))) AND (BINARY Account.txt_password = HEX(AES_ENCRYPT(accPassword, 'root'))) ;
        END//
 
@@ -71,17 +72,26 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
       END//
 
 
-CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, OUT exist INT)
+CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, IN blobContents BLOB, OUT exist INT)
       BEGIN
         SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.accountId = userID);
 
         IF exist IS NULL THEN
-          INSERT INTO Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
+          INSERT INTO BaseA.Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
             drawingName,
             NOW(),
             userID,
             fileContents
           );
+
+          INSERT INTO BaseB.Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
+            drawingName,
+            NOW(),
+            userID,
+            AES_ENCRYPT(blobContents, 'root')
+          );
+
+          INSERT INTO
 
           SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = HEX(AES_ENCRYPT(drawingName, 'root'))) AND (Drawing.accountId = userID);
           COMMIT;
@@ -92,6 +102,31 @@ CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileCon
 
       END//
 
+CREATE PROCEDURE UpdateDrawingByID_SP(IN drawingID, IN jsonFile JSON, IN blobFile BLOB)
+      BEGIN
+        DECLARE exist;
+
+        SELECT Drawing.id INTO exist FROM Drawing WHERE (Drawing.id = drawingID);
+
+        IF exist IS NULL THEN
+
+          /*Para la base A*/
+          UPDATE BaseA.Drawing SET
+            BaseA.Drawing.jso_file = jsonFile;
+          WHERE
+            BaseA.Drawing.id = drawingID;
+
+          /*Para la base B*/
+          UPDATE BaseB.Drawing SET
+            BaseB.Drawing.jso_file = AES_ENCRYPT(blobFile, 'root')
+          WHERE
+            BaseB.Drawing.id = drawingID;
+
+          COMMIT;
+        ELSE
+          SELECT NULL INTO exist;
+      END$$
+
 CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
       BEGIN
         DECLARE drawingExists INT;
@@ -99,7 +134,7 @@ CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
         SELECT Drawing.id INTO drawingExists FROM Drawing WHERE BINARY drawingID = Drawing.id;
         
         IF drawingExists IS NOT NULL THEN
-          DELETE FROM Drawing
+          DELETE * FROM Drawing
           WHERE Drawing.id = drawingID;
           COMMIT;
         END IF;

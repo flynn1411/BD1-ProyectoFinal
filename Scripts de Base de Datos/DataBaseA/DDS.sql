@@ -28,13 +28,13 @@ DROP TABLE IF EXISTS LogBook;
 /*Creamos la tabla (Role) para poder asignarle un role a cada usuario que sea ingresado en la tabla Account*/
 CREATE TABLE Role(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    txt_roleName CHAR(8) NOT NULL
+    txt_roleName TEXT
 )COMMENT = "Se llena mediante un insert, para asignarle un rol a cada usuario existente en la tabla Account";
 
 /*Insertamos los roles correspondientes en la tabla (Role)*/
 INSERT INTO Role ( txt_roleName ) VALUES
-    ( "ADMIN" ),
-    ( "OPERADOR" )
+    ( HEX(AES_ENCRYPT("ADMIN", 'root')) ),
+    ( HEX(AES_ENCRYPT("OPERADOR", 'root')) )
 ;
 
 /*Creamos la tabla (Account) es donde guardaremos la información de cada usuario, como su nombre y 

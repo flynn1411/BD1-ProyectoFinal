@@ -57,6 +57,8 @@ CREATE TRIGGER drawingDeleted_trigger
                 AES_DECRYPT(UNHEX(OLD.txt_fileName), 'root'),
                 NOW()
             );
+
+            DELETE * FROM BaseB.Drawing WHERE BaseB.Drawing.id = OLD.id;
         END$$
 
 /*delimiter ;*/
@@ -81,6 +83,12 @@ CREATE TRIGGER encryptAccountUpdate_trigger
         BEGIN
             SET NEW.txt_name = HEX(AES_ENCRYPT(NEW.txt_name, 'root'));
             SET NEW.txt_password = HEX(AES_ENCRYPT(NEW.txt_password, 'root'));
+
+            UPDATE BaseB.Account SET
+                BaseB.Account.txt_name = NEW.txt_name,
+                BaseB.Account.txt_password = NEW.txt_password
+            WHERE
+                BaseB.Account.id = NEW.id;
         END$$
 
 CREATE TRIGGER encryptDrawingUpdate_trigger
@@ -162,6 +170,9 @@ CREATE TRIGGER accountDeleted_trigger
                 AES_DECRYPT(UNHEX(OLD.txt_name), 'root'),
                 NOW()
             );
+
+        DELETE * FROM BaseB.Account WHERE OLD.id = BaseB.Account.id;
+
         END$$
 
 CREATE TRIGGER configCreated_trigger
