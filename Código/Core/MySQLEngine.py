@@ -1,4 +1,5 @@
 import mysql.connector
+import gzip
 class MySQLEngine:
 
     def __init__(self, config):
@@ -58,7 +59,12 @@ class MySQLEngine:
         return result_args[-1]
 
     def insertDraw(self, name, userId, drawJson):
-        result = self.generalCallProcedure("CreateDrawing_SP", [name, userId, drawJson, "@drawID"])
+        compressJson = gzip.compress(bytes(drawJson,'utf-8'))
+        #print('-'*30)
+        #print(compressJson)
+        #print('-'*30)
+        result = self.generalCallProcedure("CreateDrawing_SP", [name, userId, drawJson, drawJson, "@drawID"])
+        print(result)
         return result
 
     def getDraws(self, userId):
@@ -74,7 +80,9 @@ class MySQLEngine:
         return result
 
     def updateDraw(self, drawID, drawJson):
-        return self.update(drawID, "Drawing", ["jso_file"], ["'%s'" % drawJson])
+        compressJson = gzip.compress(bytes(drawJson,'utf-8'))
+        self.generalCallProcedure("UpdateDrawingByID_SP", [drawID, drawJson, drawJson])
+
         
     def loginUser(self, userAcc, passwordAcc):
         userID = self.generalCallProcedure('Auth_SP',[userAcc, passwordAcc, '@userID'])

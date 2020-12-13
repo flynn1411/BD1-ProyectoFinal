@@ -75,7 +75,7 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
       END//
 
 /*Creamos este procedimento con el fin de crear un dibujo nuevo en la base de datos,el usuario que lo realiza es identificado mediante id, esta creción es registrada en la bítacora*/
-CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, IN blobContents BLOB, OUT exist INT)
+CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, IN blobContents JSON, OUT exist INT)
       BEGIN
         SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.accountId = userID);
 
@@ -86,16 +86,14 @@ CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileCon
             userID,
             fileContents
           );
-
+          
           INSERT INTO BaseB.Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
             drawingName,
             NOW(),
             userID,
-            AES_ENCRYPT(blobContents, 'root')
+            blobContents
           );
-
-          INSERT INTO
-
+          
           SELECT Drawing.id INTO exist FROM Drawing WHERE (BINARY Drawing.txt_fileName = HEX(AES_ENCRYPT(drawingName, 'root'))) AND (Drawing.accountId = userID);
           COMMIT;
         ELSE
@@ -105,30 +103,23 @@ CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileCon
 
       END//
 
-CREATE PROCEDURE UpdateDrawingByID_SP(IN drawingID, IN jsonFile JSON, IN blobFile BLOB)
+CREATE PROCEDURE UpdateDrawingByID_SP(IN drawingID INT, IN jsonFile JSON, IN blobFile JSON)
       BEGIN
-        DECLARE exist;
+        /*Para la base A*/
+        UPDATE BaseA.Drawing SET
+          BaseA.Drawing.jso_file = jsonFile
+        WHERE
+          BaseA.Drawing.id = drawingID;
 
-        SELECT Drawing.id INTO exist FROM Drawing WHERE (Drawing.id = drawingID);
+        /*Para la base B*/
+        UPDATE BaseB.Drawing SET
+          BaseB.Drawing.jso_file = blobFile
+        WHERE
+          BaseB.Drawing.id = drawingID;
 
-        IF exist IS NULL THEN
-
-          /*Para la base A*/
-          UPDATE BaseA.Drawing SET
-            BaseA.Drawing.jso_file = jsonFile;
-          WHERE
-            BaseA.Drawing.id = drawingID;
-
-          /*Para la base B*/
-          UPDATE BaseB.Drawing SET
-            BaseB.Drawing.jso_file = AES_ENCRYPT(blobFile, 'root')
-          WHERE
-            BaseB.Drawing.id = drawingID;
-
-          COMMIT;
-        ELSE
-          SELECT NULL INTO exist;
-      END$$
+        COMMIT;
+        
+      END//
 
 /*Creamos este procedimiento para poder borrar el dibujo sí este existe en la base de datos.*/
 CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
@@ -138,7 +129,7 @@ CREATE PROCEDURE DeleteDrawingByID_SP(IN drawingID INT)
         SELECT Drawing.id INTO drawingExists FROM Drawing WHERE BINARY drawingID = Drawing.id;
         
         IF drawingExists IS NOT NULL THEN
-          DELETE * FROM Drawing
+          DELETE FROM Drawing
           WHERE Drawing.id = drawingID;
           COMMIT;
         END IF;

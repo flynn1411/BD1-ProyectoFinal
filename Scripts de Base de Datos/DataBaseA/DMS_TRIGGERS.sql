@@ -64,7 +64,7 @@ CREATE TRIGGER drawingDeleted_trigger
                 NOW()
             );
 
-            DELETE * FROM BaseB.Drawing WHERE BaseB.Drawing.id = OLD.id;
+            DELETE FROM BaseB.Drawing WHERE BaseB.Drawing.id = OLD.id;
         END$$
 
 CREATE TRIGGER encryptDrawing_trigger
@@ -176,7 +176,8 @@ CREATE TRIGGER accountDeleted_trigger
                 NOW()
             );
 
-        DELETE * FROM BaseB.Account WHERE OLD.id = BaseB.Account.id;
+        DELETE FROM BaseB.Account WHERE OLD.id = BaseB.Account.id;
+
 
         END$$
 
