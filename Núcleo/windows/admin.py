@@ -2,6 +2,7 @@ import tkinter
 import re
 import tkinter.messagebox
 from windows.userInput import UserInput
+from windows.Draws import Draws
 
 class Admin:
 
@@ -94,7 +95,8 @@ class Admin:
         self.userMgmt.mainloop() 
     
     def drawsMgmt(self):
-        pass
+        userID = self.users[self.username]
+        Draws(self.engine,userID)
 
     def onselect(self,e):
 
