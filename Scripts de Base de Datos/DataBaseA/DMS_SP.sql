@@ -2,10 +2,12 @@ USE BaseA;
 
 DROP PROCEDURE IF EXISTS Auth_SP;
 DROP PROCEDURE IF EXISTS GetRole_SP;
+DROP PROCEDURE IF EXISTS CreateDrawing_SP;
 DROP PROCEDURE IF EXISTS GetDrawingByID_SP;
 DROP PROCEDURE IF EXISTS DeleteDrawingByID_SP;
 DROP PROCEDURE IF EXISTS AddAccount_SP;
 DROP PROCEDURE IF EXISTS UpdateAccount_SP;
+DROP PROCEDURE IF EXISTS DeleteAccountByID_SP;
 DROP PROCEDURE IF EXISTS UpdateConfigByAdmin_SP;
 DROP PROCEDURE IF EXISTS UpdateConfigByUser_SP;
 
@@ -69,6 +71,25 @@ CREATE PROCEDURE GetDrawingByID_SP (IN drawingID INT, OUT drawing_json JSON)
       END//
 
 
+CREATE PROCEDURE CreateDrawing_SP(IN drawingName TEXT, IN userID INT, IN fileContents JSON, OUT drawingID INT)
+      
+      SELECT Drawing.id INTO drawingID FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.userID = userID);
+
+      IF drawingID IS NULL THEN
+        INSERT INTO Drawing (txt_fileName, tim_date, accountId, jso_file) VALUES (
+          drawingName,
+          NOW(),
+          userID,
+          fileContents,
+        );
+
+        SELECT Drawing.id INTO drawingID FROM Drawing WHERE (BINARY Drawing.txt_fileName = drawingName) AND (Drawing.userID = userID);
+        COMMIT;
+
+      END IF;
+
+      END//
+
 CREATE PROCEDURE DeleteDrawingByID_SP (IN drawingID INT)
       BEGIN
         DECLARE drawingExists INT;
@@ -116,6 +137,20 @@ CREATE PROCEDURE UpdateAccount_SP (IN affectedUser INT, IN username TEXT, IN acc
 
     COMMIT;
   END//
+
+CREATE PROCEDURE DeleteAccountByID_SP (IN accountID INT)
+      BEGIN
+        DECLARE accountExists INT;
+
+        SELECT Account.id INTO accountExists FROM Account WHERE BINARY accountID = Account.id;
+        
+        IF accountExists IS NOT NULL THEN
+          DELETE FROM Account
+          WHERE Account.id = accountId;
+
+        END IF;
+        
+      END//
 
 CREATE PROCEDURE UpdateConfigByAdmin_SP (IN affectedUserID INT, IN pencolor CHAR(7), IN fillcolor CHAR(7), IN radius INT, IN width INT)
   BEGIN

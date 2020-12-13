@@ -1,3 +1,5 @@
+USE BaseA;
+
 DROP TRIGGER IF EXISTS drawingCreated_trigger;
 DROP TRIGGER IF EXISTS drawingModified_trigger;
 DROP TRIGGER IF EXISTS drawingDeleted_trigger;
@@ -82,6 +84,21 @@ CREATE TRIGGER accountCreated_trigger
                     3,
                     NEW.txt_name,
                     NOW()
+                );
+            /*BASE B*/
+             /*Se crea una archivo config para el usuario*/
+            INSERT INTO BaseB.Config (int_width, int_radius, accountId) VALUES(
+                1,
+                10,
+                NEW.id
+                );
+                
+            /*Se registra que el usuario se creó por parte del único administrador*/
+            INSERT INTO BaseB.Account (txt_name, txt_password, id_role) VALUES
+                (
+                    NEW.txt_name,
+                    NEW.txt_password,
+                    NEW.id_role
                 );
         END$$
 
